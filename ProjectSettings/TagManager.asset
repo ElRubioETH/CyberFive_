@@ -41,3 +41,27 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background 1
+    uniqueID: 1295277539
+    locked: 0
+  - name: Background 2
+    uniqueID: 1204611267
+    locked: 0
+  - name: Background 3
+    uniqueID: 4247287593
+    locked: 0
+  - name: Background 4
+    uniqueID: 1595219161
+    locked: 0
+  - name: Background 5
+    uniqueID: 2270658749
+    locked: 0
+  - name: PowerStation
+    uniqueID: 235785779
+    locked: 0
+  - name: Platform
+    uniqueID: 4158951435
+    locked: 0
+  - name: Pipe
+    uniqueID: 1918836717
+    locked: 0
