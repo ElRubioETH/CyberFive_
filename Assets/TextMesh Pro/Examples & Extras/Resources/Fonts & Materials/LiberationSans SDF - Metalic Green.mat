@@ -12,10 +12,8 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - BEVEL_ON
   - GLOW_ON
   - OUTLINE_ON
-  - UNDERLAY_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
@@ -36,7 +34,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FaceTex:
-        m_Texture: {fileID: 2800000, guid: 283f897e4925411ebbaa758b4cb13fc2, type: 3}
+        m_Texture: {fileID: 2800000, guid: 97a8880c8431d9e4ab6217bc7097b144, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -74,7 +72,7 @@ Material:
     - _OutlineSoftness: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
-    - _OutlineWidth: 0.219
+    - _OutlineWidth: 0.483
     - _PerspectiveFilter: 0
     - _Reflectivity: 12.76
     - _ScaleRatioA: 0.9
@@ -103,12 +101,12 @@ Material:
     m_Colors:
     - _ClipRect: {r: -10000, g: -10000, b: 10000, a: 10000}
     - _EnvMatrixRotation: {r: 0, g: 0, b: 0, a: 0}
-    - _FaceColor: {r: 0, g: 1, b: 0.9470036, a: 1}
+    - _FaceColor: {r: 0, g: 1, b: 0.48565197, a: 1}
     - _GlowColor: {r: 0, g: 1, b: 0, a: 0.5}
     - _MaskCoord: {r: 0, g: 0, b: 100000, a: 100000}
-    - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0.681551, b: 1, a: 1}
     - _ReflectFaceColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectOutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecularColor: {r: 0.7689687, g: 1, b: 0.75000346, a: 1}
-    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+    - _UnderlayColor: {r: 1, g: 0, b: 0.021375656, a: 0.5}
   m_BuildTextureStacks: []
