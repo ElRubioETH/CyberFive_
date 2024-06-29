@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
     public GameObject armGameObject; // Reference to the arm GameObject
     public GameObject gunGameObject; // Reference to the gun GameObject
     public Sprite armSprite; // Sprite for the arm
-    public Sprite gunSprite; // Sprite for the gun
 
     private Rigidbody2D rb;
     private SpriteRenderer bodySpriteRenderer;
@@ -32,6 +31,11 @@ public class PlayerController : MonoBehaviour
     public Transform firePoint; // Reference to the point from which the projectile is fired
     public float bulletForce = 20f; // Editable force for the projectile
     public float firePointDistance = 1f; // Distance of firePoint from the player
+
+    public Sprite[] weaponSprites; // Array to store weapon sprites
+    private int currentWeaponIndex = 0; // Track the current weapon index
+
+    public float circleRadius = 1.5f; // Radius of the circle around the player, adjustable
 
     void Start()
     {
@@ -127,6 +131,7 @@ public class PlayerController : MonoBehaviour
             isDoubleJumping = false;
         }
     }
+
     private IEnumerator Attack()
     {
         isAttacking = true;
@@ -135,6 +140,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsAttacking", false);
         isAttacking = false;
     }
+
     void UpdateAnimator()
     {
         animator.SetBool("IsJumping", !isGrounded);
@@ -205,13 +211,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     void UpdateArmAndGunSprites()
     {
         if (isGunMode)
         {
             armSpriteRenderer.sprite = armSprite;
-            gunSpriteRenderer.sprite = gunSprite;
+            gunSpriteRenderer.sprite = weaponSprites[currentWeaponIndex]; // Use the current weapon sprite
             armGameObject.SetActive(true);
             gunGameObject.SetActive(true);
         }
@@ -222,77 +227,54 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public float circleRadius = 1.5f; // Radius of the circle around the player, adjustable
+    public void ChangeWeapon(int weaponIndex)
+    {
+        if (weaponIndex >= 0 && weaponIndex < weaponSprites.Length)
+        {
+            currentWeaponIndex = weaponIndex; // Update the current weapon index
+            gunSpriteRenderer.sprite = weaponSprites[weaponIndex];
+            // Update animation state or parameters based on the weapon
+            animator.SetInteger("WeaponIndex", weaponIndex);
+            Debug.Log($"Weapon changed to: {weaponIndex}");
+        }
+        else
+        {
+            Debug.LogError($"Weapon index {weaponIndex} is out of bounds.");
+        }
+    }
 
     void AimAtMouse()
     {
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 aimDirection = (mousePosition - transform.position).normalized;
-        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+        Vector2 direction = mousePosition - transform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-        // Flip the player based on the mouse position
-        if ((mousePosition.x < transform.position.x && !bodySpriteRenderer.flipX) || (mousePosition.x > transform.position.x && bodySpriteRenderer.flipX))
+        bool isFlipped = mousePosition.x < transform.position.x;
+
+        bodySpriteRenderer.flipX = isFlipped;
+
+        // Flip the arm and gun along the Y-axis if the cursor is to the left
+        armSpriteRenderer.flipY = isFlipped;
+        gunSpriteRenderer.flipY = isFlipped;
+
+        // Calculate the position of the arm and gun along the circle's radius
+        Vector2 circlePosition = direction.normalized * circleRadius;
+
+        if (isFlipped)
         {
-            Flip();
+            // If flipped, move the arm and gun to the opposite side of the circle
+            circlePosition = new Vector2(-circlePosition.x, circlePosition.y);
         }
 
-        // Calculate arm and gun positions in a circle around the player
-        float armOffsetAngle = angle + 90f; // Offset angle for arm position
-        float gunOffsetAngle = angle - 90f; // Offset angle for gun position
+        armGameObject.transform.localPosition = circlePosition;
+        gunGameObject.transform.localPosition = circlePosition;
 
-        Vector3 armPosition = new Vector3(Mathf.Cos(armOffsetAngle * Mathf.Deg2Rad), Mathf.Sin(armOffsetAngle * Mathf.Deg2Rad), 0f) * circleRadius;
-        Vector3 gunPosition = new Vector3(Mathf.Cos(gunOffsetAngle * Mathf.Deg2Rad), Mathf.Sin(gunOffsetAngle * Mathf.Deg2Rad), 0f) * circleRadius;
+        // Adjust arm and gun rotation based on the angle
+        armGameObject.transform.localRotation = Quaternion.Euler(0, 0, angle);
+        gunGameObject.transform.localRotation = Quaternion.Euler(0, 0, angle);
 
-        armGameObject.transform.position = transform.position + armPosition;
-        gunGameObject.transform.position = transform.position + gunPosition;
-
-        armGameObject.transform.rotation = Quaternion.Euler(0, 0, angle);
-        gunGameObject.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-        // Update animator parameters based on the angle
-        if (angle >= -45 && angle <= 45)
-        {
-            animator.SetInteger("GunDirection", 0); // Right
-        }
-        else if (angle > 45 && angle <= 135)
-        {
-            animator.SetInteger("GunDirection", 1); // Up
-        }
-        else if (angle > 135 || angle < -135)
-        {
-            animator.SetInteger("GunDirection", 2); // Left
-        }
-        else if (angle < -45 && angle >= -135)
-        {
-            animator.SetInteger("GunDirection", 3); // Down
-        }
-
-        // Update firepoint position based on aim direction
-        Vector3 firePointOffset = aimDirection * firePointDistance;
-        firePoint.position = transform.position + firePointOffset;
-    }
-
-    void Flip()
-    {
-        bodySpriteRenderer.flipX = !bodySpriteRenderer.flipX;
-
-        // Flip Y for arm and gun
-        armSpriteRenderer.flipY = !armSpriteRenderer.flipY;
-        gunSpriteRenderer.flipY = !gunSpriteRenderer.flipY;
-
-        Vector3 armPosition = armGameObject.transform.localPosition;
-        armPosition.x = -armPosition.x;
-        armGameObject.transform.localPosition = armPosition;
-
-        Vector3 gunPosition = gunGameObject.transform.localPosition;
-        gunPosition.x = -gunPosition.x;
-        gunGameObject.transform.localPosition = gunPosition;
-
-        Vector3 firePointPosition = firePoint.localPosition;
-        firePointPosition.x = -firePointPosition.x;
-        firePoint.localPosition = firePointPosition;
-
-        // Ensure firePoint rotates with the arm and flips Y-axis
-        firePoint.localRotation = Quaternion.Euler(0, bodySpriteRenderer.flipX ? 180 : 0, 0);
+        float distance = Mathf.Min(direction.magnitude, circleRadius);
+        Vector3 firePointPosition = transform.position + (Vector3)direction.normalized * distance;
+        firePoint.position = firePointPosition;
     }
 }

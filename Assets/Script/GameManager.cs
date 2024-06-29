@@ -8,12 +8,16 @@ public class GameManager : MonoBehaviour
     public GameObject settingsPanel;
     public GameObject inventoryPanel;
     public Slider volumeSlider;
+    public GameObject player; // Reference to the player GameObject
 
+    private PlayerController playerController;
     private bool isMenuOpen = false;
     private bool isInventoryOpen = false;
 
     void Start()
     {
+        playerController = player.GetComponent<PlayerController>();
+
         if (menuPanel != null)
         {
             AssignButtonAction(menuPanel, "ResumeButton", ResumeGame);
@@ -35,6 +39,20 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.LogError("Settings Panel is not assigned in the inspector.");
+        }
+
+        if (inventoryPanel != null)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                int index = i; // Capture the loop variable
+                string buttonName = "WeaponButton" + (i + 1);
+                AssignButtonAction(inventoryPanel, buttonName, () => SelectWeapon(index));
+            }
+        }
+        else
+        {
+            Debug.LogError("Inventory Panel is not assigned in the inspector.");
         }
 
         if (volumeSlider != null)
@@ -147,5 +165,10 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError($"{buttonName} not found in {panel.name}");
         }
+    }
+
+    private void SelectWeapon(int weaponIndex)
+    {
+        playerController.ChangeWeapon(weaponIndex);
     }
 }
