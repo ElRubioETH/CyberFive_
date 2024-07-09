@@ -249,9 +249,13 @@ public class PlayerController : MonoBehaviour
         {
             currentWeaponIndex = weaponIndex; // Update the current weapon index
             gunSpriteRenderer.sprite = weaponSprites[weaponIndex];
-            // Update animation state or parameters based on the weapon
             animator.SetInteger("WeaponIndex", weaponIndex);
             Debug.Log($"Weapon changed to: {weaponIndex}");
+
+            // Equip the weapon
+            isGunMode = true;
+            animator.SetBool("IsGunMode", isGunMode);
+            UpdateArmAndGunSprites();
         }
         else
         {

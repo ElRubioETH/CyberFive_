@@ -7,12 +7,14 @@ public class GameManager : MonoBehaviour
     public GameObject menuPanel;
     public GameObject settingsPanel;
     public GameObject inventoryPanel;
+    public GameObject shopPanel; // Reference to the shop panel
     public Slider volumeSlider;
     public GameObject player; // Reference to the player GameObject
 
     private PlayerController playerController;
     private bool isMenuOpen = false;
     private bool isInventoryOpen = false;
+    private bool isShopOpen = false;
 
     void Start()
     {
@@ -55,6 +57,15 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Inventory Panel is not assigned in the inspector.");
         }
 
+        if (shopPanel != null)
+        {
+            AssignButtonAction(shopPanel, "CloseButton", CloseShop);
+        }
+        else
+        {
+            Debug.LogError("Shop Panel is not assigned in the inspector.");
+        }
+
         if (volumeSlider != null)
         {
             volumeSlider.onValueChanged.AddListener(OnVolumeChange);
@@ -74,6 +85,10 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.M))
         {
             ToggleInventory();
+        }
+        if (Input.GetKeyDown(KeyCode.S)) // Key to open/close shop
+        {
+            ToggleShop();
         }
     }
 
@@ -96,6 +111,12 @@ public class GameManager : MonoBehaviour
     {
         isInventoryOpen = !isInventoryOpen;
         inventoryPanel.SetActive(isInventoryOpen);
+    }
+
+    void ToggleShop()
+    {
+        isShopOpen = !isShopOpen;
+        shopPanel.SetActive(isShopOpen);
     }
 
     public void ResumeGame()
@@ -170,5 +191,11 @@ public class GameManager : MonoBehaviour
     private void SelectWeapon(int weaponIndex)
     {
         playerController.ChangeWeapon(weaponIndex);
+    }
+
+    private void CloseShop()
+    {
+        isShopOpen = false;
+        shopPanel.SetActive(false);
     }
 }
