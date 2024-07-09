@@ -914,7 +914,7 @@ GameObject:
   - component: {fileID: 1135653078}
   - component: {fileID: 1135653077}
   m_Layer: 0
-  m_Name: Idle 3_0
+  m_Name: Heli
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1020,7 +1020,7 @@ GameObject:
   - component: {fileID: 1139198597}
   - component: {fileID: 1139198596}
   m_Layer: 0
-  m_Name: Idle 1_0
+  m_Name: UFO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1277,7 +1277,7 @@ GameObject:
   - component: {fileID: 1919653064}
   - component: {fileID: 1919653063}
   m_Layer: 0
-  m_Name: Idle 4_0
+  m_Name: Dump
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
