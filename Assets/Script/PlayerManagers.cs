@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private bool isAttacking;
     private bool isGunMode;
+    private bool isDefaultMode;
     private bool canDoubleJump; // Flag to allow double jump
     private bool isDoubleJumping; // Flag to track double jump state
     private int maxHealth = 100;
@@ -96,13 +97,28 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Attack());
         }
 
-        if (Input.GetKeyDown(KeyCode.G)) // Key to equip/unequip gun
+        if (Input.GetKeyDown(KeyCode.G)) 
         {
             isGunMode = !isGunMode;
             animator.SetBool("IsGunMode", isGunMode);
             UpdateArmAndGunSprites();
             if (!isGunMode)
             {
+                armGameObject.transform.localRotation = Quaternion.identity;
+                gunGameObject.transform.localRotation = Quaternion.identity;
+                animator.SetInteger("GunDirection", 0);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.H)) // Key to switch to default mode
+        {
+            isDefaultMode = !isDefaultMode;
+            animator.SetBool("IsDefaultMode", isDefaultMode);
+            if (isDefaultMode)
+            {
+                isGunMode = false;
+                animator.SetBool("IsGunMode", false);
+                armGameObject.SetActive(false);
+                gunGameObject.SetActive(false);
                 armGameObject.transform.localRotation = Quaternion.identity;
                 gunGameObject.transform.localRotation = Quaternion.identity;
                 animator.SetInteger("GunDirection", 0);
