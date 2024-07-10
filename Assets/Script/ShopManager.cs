@@ -71,6 +71,9 @@ public class ShopManager : MonoBehaviour
                     buttonTransform.gameObject.SetActive(false);
                 }
 
+                // Update gold text in the PlayerController
+                playerController.UpdateGoldText();
+
                 Debug.Log($"Weapon bought: {weaponNames[weaponIndex]}");
             }
             else

@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     private PlayerController playerController;
     private bool isMenuOpen = false;
     private bool isInventoryOpen = false;
-    private bool isShopOpen = false;
+    //private bool isShopOpen = false;
 
     void Start()
     {
@@ -185,7 +185,7 @@ public class GameManager : MonoBehaviour
 
     private void CloseShop()
     {
-        isShopOpen = false;
+        //isShopOpen = false;
         shopPanel.SetActive(false);
     }
 }

@@ -2926,8 +2926,9 @@ GameObject:
   - component: {fileID: 462806261}
   - component: {fileID: 462806260}
   - component: {fileID: 462806259}
+  - component: {fileID: 462806262}
   m_Layer: 5
-  m_Name: ShopPanel
+  m_Name: Shop Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2998,9 +2999,46 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000030517578}
+  m_AnchoredPosition: {x: 0.000030517578, y: 0.000045776367}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &462806262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 462806258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2077be7328bc37543bfc35620b7295da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopPanel: {fileID: 462806258}
+  player: {fileID: 860260266}
+  weaponNames:
+  - weapon1
+  - weapon2
+  - weapon3
+  - weapon4
+  - weapon5
+  - weapon6
+  - weapon7
+  - weapon8
+  - weapon9
+  - weapon10
+  weaponSprites:
+  - {fileID: 21300000, guid: be1da10e6d4ef9e4c845c9659c5d2753, type: 3}
+  - {fileID: 21300000, guid: dbb1c8c0a01a8454bbf73ce7f3abb5c3, type: 3}
+  - {fileID: 21300000, guid: e730da69ecd88d847b8a90f6c32a3914, type: 3}
+  - {fileID: 21300000, guid: d67f906a1c90927489a47371fd40fc88, type: 3}
+  - {fileID: 21300000, guid: eb8dbc4e61f99b241aa838975cb606e8, type: 3}
+  - {fileID: 21300000, guid: 891117139df74004d8f1b42fe75b9760, type: 3}
+  - {fileID: 21300000, guid: a9171b41fcd285a44aa5758f348db897, type: 3}
+  - {fileID: 21300000, guid: 8fc6c8fa8aa63ae4a91aeaafd71bc83f, type: 3}
+  - {fileID: 21300000, guid: f1eb3669e2eee2648b3482b6afe563a8, type: 3}
+  - {fileID: 21300000, guid: b0fd0eb4e128f934dbd70fa05aa240c4, type: 3}
+  weaponCost: 1000
 --- !u!1 &476565397
 GameObject:
   m_ObjectHideFlags: 0
@@ -8524,73 +8562,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1816024277478104553, guid: ba029ceeef706b940b8160e34a4141d1, type: 3}
   m_PrefabInstance: {fileID: 360635535}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &829901417
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 829901419}
-  - component: {fileID: 829901418}
-  m_Layer: 0
-  m_Name: Shop Panel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &829901418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 829901417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2077be7328bc37543bfc35620b7295da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shopPanel: {fileID: 462806258}
-  player: {fileID: 860260266}
-  weaponNames:
-  - Weapon1
-  - Weapon2
-  - Weapon3
-  - Weapon4
-  - Weapon5
-  - Weapon6
-  - Weapon7
-  - Weapon8
-  - Weapon9
-  weaponSprites:
-  - {fileID: 21300000, guid: be1da10e6d4ef9e4c845c9659c5d2753, type: 3}
-  - {fileID: 21300000, guid: dbb1c8c0a01a8454bbf73ce7f3abb5c3, type: 3}
-  - {fileID: 21300000, guid: e730da69ecd88d847b8a90f6c32a3914, type: 3}
-  - {fileID: 21300000, guid: d67f906a1c90927489a47371fd40fc88, type: 3}
-  - {fileID: 21300000, guid: eb8dbc4e61f99b241aa838975cb606e8, type: 3}
-  - {fileID: 21300000, guid: 891117139df74004d8f1b42fe75b9760, type: 3}
-  - {fileID: 21300000, guid: a9171b41fcd285a44aa5758f348db897, type: 3}
-  - {fileID: 21300000, guid: 8fc6c8fa8aa63ae4a91aeaafd71bc83f, type: 3}
-  - {fileID: 21300000, guid: f1eb3669e2eee2648b3482b6afe563a8, type: 3}
-  weaponCost: 1000
---- !u!4 &829901419
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 829901417}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.8997965, y: -2.8119662, z: -1.4265674}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &844492071
 GameObject:
   m_ObjectHideFlags: 0
@@ -9077,7 +9048,7 @@ MonoBehaviour:
   circleRadius: 0.01
   gold: 0
   inventoryPanel: {fileID: 78318779}
-  goldText: {fileID: 0}
+  goldText: {fileID: 1279144145}
 --- !u!50 &860260272
 Rigidbody2D:
   serializedVersion: 4
@@ -21093,5 +21064,4 @@ SceneRoots:
   - {fileID: 1198254060}
   - {fileID: 42553864}
   - {fileID: 1810378396}
-  - {fileID: 829901419}
   - {fileID: 1026954031}

@@ -316,7 +316,7 @@ public class PlayerController : MonoBehaviour
         UpdateGoldText(); // Update gold text whenever gold amount changes
     }
 
-    void UpdateGoldText()
+    public void UpdateGoldText()
     {
         if (goldText != null)
         {
