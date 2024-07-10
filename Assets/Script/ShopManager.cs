@@ -62,6 +62,15 @@ public class ShopManager : MonoBehaviour
                 playerController.gold -= weaponCost;
                 playerController.ChangeWeapon(weaponIndex);
                 playerController.ShowWeaponButton(weaponIndex); // Display the purchased weapon button in inventory
+
+                // Hide the purchased weapon button in the shop panel
+                string buttonName = "WeaponButton" + (weaponIndex + 1);
+                Transform buttonTransform = shopPanel.transform.Find(buttonName);
+                if (buttonTransform != null)
+                {
+                    buttonTransform.gameObject.SetActive(false);
+                }
+
                 Debug.Log($"Weapon bought: {weaponNames[weaponIndex]}");
             }
             else

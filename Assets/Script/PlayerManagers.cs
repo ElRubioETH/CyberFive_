@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -42,7 +43,7 @@ public class PlayerController : MonoBehaviour
 
     // Existing variables
     public GameObject inventoryPanel; // Reference to the inventory panel
-    public Text goldText; // Reference to the gold Text element
+    public TMP_Text goldText; // Reference to the gold Text element
 
     void Start()
     {

@@ -86,10 +86,6 @@ public class GameManager : MonoBehaviour
         {
             ToggleInventory();
         }
-        if (Input.GetKeyDown(KeyCode.S)) // Key to open/close shop
-        {
-            ToggleShop();
-        }
     }
 
     void ToggleMenu()
@@ -111,12 +107,6 @@ public class GameManager : MonoBehaviour
     {
         isInventoryOpen = !isInventoryOpen;
         inventoryPanel.SetActive(isInventoryOpen);
-    }
-
-    void ToggleShop()
-    {
-        isShopOpen = !isShopOpen;
-        shopPanel.SetActive(isShopOpen);
     }
 
     public void ResumeGame()
