@@ -3,10 +3,11 @@ using UnityEngine.UI;
 
 public class ShopManager : MonoBehaviour
 {
-    public GameObject shopPanel; // Reference to the shop panel UI
-    public GameObject player; // Reference to the player GameObject
-    public string[] weaponNames; // Names of the weapons for display purposes
-    public Sprite[] weaponSprites; // Sprites for the weapons
+    public GameObject shopPanel;
+    public GameObject player;
+    public string[] weaponNames;
+    public Sprite[] weaponSprites;
+    public int weaponCost = 1000; // Cost of each weapon
 
     private PlayerController playerController;
 
@@ -18,12 +19,12 @@ public class ShopManager : MonoBehaviour
         {
             for (int i = 0; i < weaponNames.Length; i++)
             {
-                int index = i; // Capture the loop variable
+                int index = i;
                 string buttonName = "WeaponButton" + (i + 1);
                 AssignButtonAction(shopPanel, buttonName, () => BuyWeapon(index));
             }
 
-            AssignButtonAction(shopPanel, "CloseButton", CloseShop); // Ensure this line is included to assign the CloseButton action
+            AssignButtonAction(shopPanel, "CloseButton", CloseShop);
         }
         else
         {
@@ -56,8 +57,17 @@ public class ShopManager : MonoBehaviour
     {
         if (weaponIndex >= 0 && weaponIndex < weaponSprites.Length)
         {
-            playerController.ChangeWeapon(weaponIndex);
-            Debug.Log($"Weapon bought: {weaponNames[weaponIndex]}");
+            if (playerController.gold >= weaponCost)
+            {
+                playerController.gold -= weaponCost;
+                playerController.ChangeWeapon(weaponIndex);
+                playerController.ShowWeaponButton(weaponIndex); // Display the purchased weapon button in inventory
+                Debug.Log($"Weapon bought: {weaponNames[weaponIndex]}");
+            }
+            else
+            {
+                Debug.Log("Not enough gold to buy this weapon.");
+            }
         }
         else
         {

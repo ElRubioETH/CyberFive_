@@ -38,8 +38,17 @@ public class PlayerController : MonoBehaviour
 
     public float circleRadius = 1.5f; // Radius of the circle around the player, adjustable
 
+    public int gold = 0; // Player's gold
+
+    // Existing variables
+    public GameObject inventoryPanel; // Reference to the inventory panel
+    public Text goldText; // Reference to the gold Text element
+
     void Start()
     {
+        // Existing code
+        HideAllWeaponButtons(); // Hide all weapon buttons initially
+        ShowWeaponButton(0); // Display only the first weapon button initially
         rb = GetComponent<Rigidbody2D>();
         bodySpriteRenderer = GetComponent<SpriteRenderer>();
         armSpriteRenderer = armGameObject.GetComponent<SpriteRenderer>();
@@ -47,6 +56,7 @@ public class PlayerController : MonoBehaviour
         currentHealth = maxHealth;
         UpdateHealthBar();
         UpdateArmAndGunSprites();
+        UpdateGoldText(); // Update gold text on start
     }
 
     void Update()
@@ -97,7 +107,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Attack());
         }
 
-        if (Input.GetKeyDown(KeyCode.G)) 
+        if (Input.GetKeyDown(KeyCode.G))
         {
             isGunMode = !isGunMode;
             animator.SetBool("IsGunMode", isGunMode);
@@ -296,5 +306,48 @@ public class PlayerController : MonoBehaviour
         float distance = Mathf.Min(direction.magnitude, circleRadius);
         Vector3 firePointPosition = transform.position + (Vector3)direction.normalized * distance;
         firePoint.position = firePointPosition;
+    }
+
+    public void AddGold(int amount)
+    {
+        gold += amount;
+        Debug.Log($"Gold: {gold}");
+        UpdateGoldText(); // Update gold text whenever gold amount changes
+    }
+
+    void UpdateGoldText()
+    {
+        if (goldText != null)
+        {
+            goldText.text = "Gold: " + gold;
+        }
+    }
+
+    public void UpdateInventory(int weaponIndex)
+    {
+        ShowWeaponButton(weaponIndex);
+    }
+
+    public void HideAllWeaponButtons()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            string buttonName = "WeaponButton" + (i + 1);
+            Transform buttonTransform = inventoryPanel.transform.Find(buttonName);
+            if (buttonTransform != null)
+            {
+                buttonTransform.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void ShowWeaponButton(int weaponIndex)
+    {
+        string buttonName = "WeaponButton" + (weaponIndex + 1);
+        Transform buttonTransform = inventoryPanel.transform.Find(buttonName);
+        if (buttonTransform != null)
+        {
+            buttonTransform.gameObject.SetActive(true);
+        }
     }
 }
