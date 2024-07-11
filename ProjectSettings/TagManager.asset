@@ -41,3 +41,24 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: backgr
+    uniqueID: 705355231
+    locked: 0
+  - name: tree
+    uniqueID: 661406321
+    locked: 0
+  - name: nen
+    uniqueID: 604391269
+    locked: 0
+  - name: thang
+    uniqueID: 2089118169
+    locked: 0
+  - name: player
+    uniqueID: 2742938161
+    locked: 0
+  - name: New Layer 6
+    uniqueID: 3925120251
+    locked: 0
+  - name: New Layer 7
+    uniqueID: 1875826467
+    locked: 0
