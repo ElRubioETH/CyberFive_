@@ -5,7 +5,8 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5f;
+    public float walkSpeed = 5f;
+    public float runSpeed = 8f;
     public float jumpForce = 7f;
     public Transform groundCheck;
     public LayerMask groundLayer;
@@ -45,6 +46,11 @@ public class PlayerController : MonoBehaviour
     public GameObject inventoryPanel; // Reference to the inventory panel
     public TMP_Text goldText; // Reference to the gold Text element
 
+    // Climbing variables
+    public Transform climbCheck; // Check if the player is near a climbable object
+    public LayerMask climbableLayer; // Layer for climbable objects
+    private bool isClimbing = false;
+
     void Start()
     {
         // Existing code
@@ -73,21 +79,32 @@ public class PlayerController : MonoBehaviour
             moveInput = 1;
         }
 
+        float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+
         if (!isAttacking)
         {
-            rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
+            rb.velocity = new Vector2(moveInput * currentSpeed, rb.velocity.y);
 
             if (moveInput != 0)
             {
-                animator.SetBool("IsRunning", true);
-                if (!isGunMode)
+                if (isGunMode)
                 {
+                    animator.SetBool("IsWalkingGun", !Input.GetKey(KeyCode.LeftShift));
+                    animator.SetBool("IsRunningGun", Input.GetKey(KeyCode.LeftShift));
+                }
+                else
+                {
+                    animator.SetBool("IsWalking", !Input.GetKey(KeyCode.LeftShift));
+                    animator.SetBool("IsRunning", Input.GetKey(KeyCode.LeftShift));
                     bodySpriteRenderer.flipX = moveInput < 0;
                 }
             }
             else
             {
+                animator.SetBool("IsWalking", false);
                 animator.SetBool("IsRunning", false);
+                animator.SetBool("IsWalkingGun", false);
+                animator.SetBool("IsRunningGun", false);
             }
 
             if (Input.GetButtonDown("Jump"))
@@ -146,6 +163,7 @@ public class PlayerController : MonoBehaviour
         }
 
         CheckGrounded();
+        CheckClimbable(); // Check if the player can climb
         UpdateAnimator();
     }
 
@@ -157,6 +175,32 @@ public class PlayerController : MonoBehaviour
             canDoubleJump = true; // Reset double jump ability when grounded
             isDoubleJumping = false;
         }
+    }
+
+    void CheckClimbable()
+    {
+        Collider2D climbable = Physics2D.OverlapCircle(climbCheck.position, 0.2f, climbableLayer);
+        if (climbable && Input.GetKey(KeyCode.W))
+        {
+            StartClimbing();
+        }
+        else if (!climbable || Input.GetKeyUp(KeyCode.W))
+        {
+            StopClimbing();
+        }
+    }
+
+    void StartClimbing()
+    {
+        isClimbing = true;
+        rb.velocity = new Vector2(rb.velocity.x, walkSpeed);
+        animator.SetBool("IsClimbing", true);
+    }
+
+    void StopClimbing()
+    {
+        isClimbing = false;
+        animator.SetBool("IsClimbing", false);
     }
 
     private IEnumerator Attack()
@@ -173,6 +217,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsJumping", !isGrounded);
         animator.SetBool("IsGunMode", isGunMode);
         animator.SetBool("IsDoubleJumping", isDoubleJumping); // Add this line
+        animator.SetBool("IsClimbing", isClimbing); // Add this line
 
         if (isGunMode)
         {
@@ -202,6 +247,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        animator.SetTrigger("TakeDamage");
         UpdateHealthBar();
         if (currentHealth <= 0)
         {
@@ -220,6 +266,12 @@ public class PlayerController : MonoBehaviour
     void Die()
     {
         animator.SetTrigger("Die");
+        // Disable player controls
+        this.enabled = false;
+        rb.velocity = Vector2.zero;
+        rb.isKinematic = true;
+        // Optionally, destroy the player object after some time
+        // Destroy(gameObject, 2f);
     }
 
     void Shoot()
