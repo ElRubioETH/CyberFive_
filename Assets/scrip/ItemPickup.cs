@@ -12,12 +12,15 @@ public class ItemPickup : MonoBehaviour
         Destroy(this.gameObject);
         //add inventory
         InventoryManager.Instance.Add(item);
+        /*InventoryManager.Instance.DisplayInventory();*/
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            
             pickup();
+            
         }
     }
 }
