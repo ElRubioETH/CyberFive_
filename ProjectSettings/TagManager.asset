@@ -48,11 +48,14 @@ TagManager:
   - name: tree
     uniqueID: 661406321
     locked: 0
-  - name: nen
-    uniqueID: 604391269
-    locked: 0
   - name: thang
     uniqueID: 2089118169
+    locked: 0
+  - name: decor
+    uniqueID: 984424859
+    locked: 0
+  - name: nen
+    uniqueID: 604391269
     locked: 0
   - name: player
     uniqueID: 2742938161
