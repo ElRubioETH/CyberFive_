@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ground
+  - Bullet
+  - Projectile
   layers:
   - Default
   - TransparentFX
@@ -11,9 +14,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Player
+  - Ground
+  - Item
   - 
   - 
   - 
@@ -59,9 +62,27 @@ TagManager:
   - name: PowerStation
     uniqueID: 235785779
     locked: 0
+  - name: Platform Behind
+    uniqueID: 2485780511
+    locked: 0
   - name: Platform
     uniqueID: 4158951435
     locked: 0
   - name: Pipe
     uniqueID: 1918836717
+    locked: 0
+  - name: Ghe
+    uniqueID: 3604297913
+    locked: 0
+  - name: Player
+    uniqueID: 452491959
+    locked: 0
+  - name: UI
+    uniqueID: 1106347275
+    locked: 0
+  - name: Item
+    uniqueID: 3852926795
+    locked: 0
+  - name: Hand
+    uniqueID: 2251187375
     locked: 0
