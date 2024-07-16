@@ -12,8 +12,8 @@ public class NPCDialogue : MonoBehaviour
     private int dialogueIndex = 0;
     private string[] dialogueLines = {
         "Hello there!",
-        "Nhìn Cái Con Cặc Gì Mà Nhìn",
-        "Cút!"
+        "tôi cần sự giúp đỡ của bạn",
+        "tạm biệt"
     };
 
     void Start()
