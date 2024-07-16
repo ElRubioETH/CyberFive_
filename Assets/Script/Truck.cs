@@ -1,14 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-public class RedHead : MonoBehaviour
+public class EnemyTruck : MonoBehaviour
 {
-    // UFO movement variables
-    public float pointA = -5f;  // X-coordinate of point A
-    public float pointB = 5f;   // X-coordinate of point B
-    public float speed = 2.0f;  // UFO movement speed
-
     // Health and damage variables
     public int health = 100;
     public int maxHealth = 100; // Maximum health for the slider
@@ -18,20 +13,22 @@ public class RedHead : MonoBehaviour
     public Slider delayedHealthBar; // Reference to the delayed health bar slider
     public float healthBarUpdateDuration = 1.5f; // Duration for the health bar to update
 
-    private float currentTarget;  // X-coordinate of the current target
-    private Rigidbody2D rb;  // Reference to the UFO's Rigidbody2D
-    private SpriteRenderer spriteRenderer;  // Reference to the UFO's SpriteRenderer
-    private Animator animator; // Reference to the UFO's Animator
     private float lastDamageTime; // Time when the last damage was taken
     private bool isUpdatingDelayedHealthBar = false; // Flag to check if the delayed health bar coroutine is running
-    private bool isStandingStill = false; // Flag to check if the UFO is standing still
 
-    void Start()
+    // Attack and movement variables
+    public Animator animator; // Ensure to assign this in the Unity Editor
+    public Transform player;
+    public float attackCooldown = 2f;
+    private float nextAttackTime = 0f;
+    private bool playerInRange = false;
+
+    private bool isDead = false;
+
+    private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
-        currentTarget = pointB;  // Initially, move to point B
+        // Initialize health
+        health = maxHealth;
 
         // Initialize the health bar sliders
         if (healthBar != null)
@@ -47,71 +44,58 @@ public class RedHead : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
-        if (!isStandingStill)
+        if (isDead) return;
+
+        if (playerInRange && Time.time >= nextAttackTime)
         {
-            MoveToTarget();
+            AttackPlayer();
+            nextAttackTime = Time.time + attackCooldown;
         }
     }
 
-    void MoveToTarget()
+    private void AttackPlayer()
     {
-        // Determine direction and flip sprite if necessary
-        float direction = currentTarget > transform.position.x ? 1f : -1f;
-        spriteRenderer.flipX = direction < 0f;
+        Vector2 direction = player.position - transform.position;
 
-        // Move the UFO towards the current target
-        float step = speed * Time.deltaTime;
-        transform.position = new Vector2(Mathf.MoveTowards(transform.position.x, currentTarget, step), transform.position.y);
-
-        // Play run animation while moving
-        animator.SetBool("IsRunning", true);
-
-        // If the UFO is close to the current target, switch target and stand still for 3 seconds
-        if (Mathf.Abs(transform.position.x - currentTarget) < 0.1f)
+        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
         {
-            StartCoroutine(StandStill());
+            // Horizontal attack
+            animator.SetBool("IsStraight", true);
+            animator.SetBool("Is45up", false);
+            animator.SetBool("Is45down", false);
         }
-    }
-
-    IEnumerator StandStill()
-    {
-        // Stop moving and play idle animation
-        isStandingStill = true;
-        animator.SetBool("IsRunning", false);
-        animator.SetBool("IsIdle", true);
-
-        // Stand still for 3 seconds
-        yield return new WaitForSeconds(3f);
-
-        // Resume moving
-        animator.SetBool("IsIdle", false);
-        isStandingStill = false;
-        currentTarget = (currentTarget == pointA) ? pointB : pointA;
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
+        else
         {
-            PlayerController playerController = other.GetComponent<PlayerController>();
-            if (playerController != null)
+            if (direction.y > 0)
             {
-                playerController.TakeDamage(10); // Example damage value
+                // Upward attack
+                animator.SetBool("Is45up", true);
+                animator.SetBool("IsStraight", false);
+                animator.SetBool("Is45down", false);
+            }
+            else
+            {
+                // Downward attack
+                animator.SetBool("Is45down", true);
+                animator.SetBool("IsStraight", false);
+                animator.SetBool("Is45up", false);
             }
         }
-        else if (other.CompareTag("Projectile"))
-        {
-            TakeDamage(damageFromProjectile);
-            Destroy(other.gameObject); // Destroy the projectile on hit
-        }
+
+        // Truck attack animation
+        animator.SetTrigger("TruckAttack");
     }
 
     public void TakeDamage(int damage)
     {
+        if (isDead) return;
+
         health -= damage;
         lastDamageTime = Time.time;
+        animator.SetTrigger("IsTakingDamage");
+
         if (healthBar != null)
         {
             StartCoroutine(UpdateHealthBar(healthBar, healthBar.value, health, healthBarUpdateDuration));
@@ -154,13 +138,38 @@ public class RedHead : MonoBehaviour
         isUpdatingDelayedHealthBar = false;
     }
 
-    void Die()
+    private void Die()
     {
+        isDead = true;
+        animator.SetTrigger("IsDead");
+
         PlayerController playerController = FindObjectOfType<PlayerController>();
         if (playerController != null)
         {
             playerController.AddGold(goldReward);
         }
+
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            playerInRange = true;
+        }
+        else if (collision.CompareTag("PlayerProjectile"))
+        {
+            TakeDamage(damageFromProjectile);
+            Destroy(collision.gameObject); // Destroy the projectile on collision
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            playerInRange = false;
+        }
     }
 }

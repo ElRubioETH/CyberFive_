@@ -1,24 +1,47 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
 
 public class Heli : MonoBehaviour
 {
-    public Vector2 pointA = new Vector2(-5f, 0f);  // Tọa độ điểm A
-    public Vector2 pointB = new Vector2(5f, 0f);   // Tọa độ điểm B
-    public float speed = 2.0f;  // Tốc độ di chuyển của vật thể
-    public int damage = 20;  // Lượng máu bị trừ khi chạm vào người chơi
+    // UFO movement variables
+    public float pointA = -5f;  // X-coordinate of point A
+    public float pointB = 5f;   // X-coordinate of point B
+    public float speed = 2.0f;  // Tốc độ di chuyển của UFO
 
-    private Vector2 currentTarget;  // Điểm hiện tại mà vật thể sẽ di chuyển tới
-    private Rigidbody2D rb;  // Tham chiếu đến Rigidbody2D của vật thể
-    private BoxCollider2D boxCollider;  // Tham chiếu đến BoxCollider2D của vật thể
-    private SpriteRenderer spriteRenderer;  // Tham chiếu đến SpriteRenderer của vật thể
+    // Health and damage variables
+    public int health = 100;
+    public int maxHealth = 100; // Maximum health for the slider
+    public int goldReward = 100; // Gold given when the enemy dies
+    public int damageFromProjectile = 50; // Damage taken from player projectiles
+    public Slider healthBar; // Reference to the health bar slider
+    public Slider delayedHealthBar; // Reference to the delayed health bar slider
+    public float healthBarUpdateDuration = 1.5f; // Duration for the health bar to update
+
+    private float currentTarget;  // X-coordinate of the current target
+    private Rigidbody2D rb;  // Tham chiếu đến Rigidbody2D của UFO
+    private SpriteRenderer spriteRenderer;  // Tham chiếu đến SpriteRenderer của UFO
+    private float lastDamageTime; // Time when the last damage was taken
+    private bool isUpdatingDelayedHealthBar = false; // Flag to check if the delayed health bar coroutine is running
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-
         currentTarget = pointB;  // Ban đầu, di chuyển tới điểm B
+
+        // Initialize the health bar sliders
+        if (healthBar != null)
+        {
+            healthBar.maxValue = maxHealth;
+            healthBar.value = health;
+        }
+
+        if (delayedHealthBar != null)
+        {
+            delayedHealthBar.maxValue = maxHealth;
+            delayedHealthBar.value = health;
+        }
     }
 
     void Update()
@@ -29,31 +52,91 @@ public class Heli : MonoBehaviour
 
     void MoveToTarget()
     {
-        // Di chuyển vật thể tới điểm hiện tại
-        Vector2 direction = (currentTarget - (Vector2)transform.position).normalized;
-        rb.velocity = direction * speed;
+        // Di chuyển UFO tới điểm hiện tại
+        float step = speed * Time.deltaTime;
+        transform.position = new Vector2(Mathf.MoveTowards(transform.position.x, currentTarget, step), transform.position.y);
     }
 
     void CheckSwitchTarget()
     {
-        // Nếu vật thể gần điểm hiện tại, chuyển đổi mục tiêu
-        if (Vector2.Distance(transform.position, currentTarget) < 0.1f)
+        // Nếu UFO gần điểm hiện tại, chuyển đổi mục tiêu
+        if (Mathf.Abs(transform.position.x - currentTarget) < 0.1f)
         {
             currentTarget = (currentTarget == pointA) ? pointB : pointA;
             spriteRenderer.flipX = !spriteRenderer.flipX;  // Quay đầu lại
         }
     }
 
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-        //if (collision.gameObject.CompareTag("Player"))
-        //{
-            //PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
-            //if (playerHealth != null)
-            //{
-                //playerHealth.TakeDamage(damage);  // Gọi hàm trừ máu của người chơi
-            //}
-        //}
-    //}
-}
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            if (playerController != null)
+            {
+                playerController.TakeDamage(10); // Example damage value
+            }
+        }
+        else if (other.CompareTag("Projectile"))
+        {
+            TakeDamage(damageFromProjectile);
+            Destroy(other.gameObject); // Destroy the projectile on hit
+        }
+    }
 
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        lastDamageTime = Time.time;
+        if (healthBar != null)
+        {
+            StartCoroutine(UpdateHealthBar(healthBar, healthBar.value, health, healthBarUpdateDuration));
+        }
+        if (!isUpdatingDelayedHealthBar && delayedHealthBar != null)
+        {
+            StartCoroutine(UpdateDelayedHealthBar());
+        }
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    private IEnumerator UpdateHealthBar(Slider slider, float startValue, float endValue, float duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            slider.value = Mathf.Lerp(startValue, endValue, elapsed / duration);
+            yield return null;
+        }
+        slider.value = endValue;
+    }
+
+    private IEnumerator UpdateDelayedHealthBar()
+    {
+        isUpdatingDelayedHealthBar = true;
+        while (Time.time - lastDamageTime < 1.0f)
+        {
+            yield return null;
+        }
+
+        if (delayedHealthBar != null)
+        {
+            StartCoroutine(UpdateHealthBar(delayedHealthBar, delayedHealthBar.value, health, healthBarUpdateDuration));
+        }
+
+        isUpdatingDelayedHealthBar = false;
+    }
+
+    void Die()
+    {
+        PlayerController playerController = FindObjectOfType<PlayerController>();
+        if (playerController != null)
+        {
+            playerController.AddGold(goldReward);
+        }
+        Destroy(gameObject);
+    }
+}
