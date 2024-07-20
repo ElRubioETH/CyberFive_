@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
+using TMPro; // Add this for TextMeshPro
 
 public class MainMenuController : MonoBehaviour
 {
@@ -13,6 +15,8 @@ public class MainMenuController : MonoBehaviour
     public Button settingsButton;
     public Button returnButton;
     public Button exitButton;
+    public AudioMixer audioMixer; // Reference to the Audio Mixer
+    public TMP_Text volumePercentageText; // Reference to TMP text for volume percentage
 
     void Start()
     {
@@ -30,6 +34,14 @@ public class MainMenuController : MonoBehaviour
         // Initialize settings
         settingsPanel.SetActive(false);
         mainMenuPanel.SetActive(true);
+
+        // Set the slider's initial value to match the current volume
+        float currentVolume;
+        audioMixer.GetFloat("MasterVolume", out currentVolume);
+        volumeSlider.value = Mathf.Pow(10, currentVolume / 20); // Convert dB to linear value
+
+        // Update volume percentage text
+        UpdateVolumePercentageText(volumeSlider.value);
     }
 
     void PlayGame()
@@ -57,10 +69,30 @@ public class MainMenuController : MonoBehaviour
     void SetResolution(int width, int height)
     {
         Screen.SetResolution(width, height, Screen.fullScreen);
+        Debug.Log($"Resolution set to: {width}x{height}, FullScreen: {Screen.fullScreen}");
+
+        // Force canvas update to adjust UI elements
+        Canvas.ForceUpdateCanvases();
     }
 
     void ChangeVolume(float volume)
     {
-        AudioListener.volume = volume;
+        // Prevent the volume from being set to 0 to avoid logarithm issues
+        float minVolume = 0.0001f; // Smallest volume to use when slider is at 0
+        float clampedVolume = Mathf.Clamp(volume, minVolume, 1f);
+
+        // Convert linear value to dB
+        float dB = Mathf.Log10(clampedVolume) * 20;
+
+        audioMixer.SetFloat("MasterVolume", dB);
+
+        // Update volume percentage text
+        UpdateVolumePercentageText(volume);
+    }
+
+    void UpdateVolumePercentageText(float volume)
+    {
+        int volumePercentage = Mathf.RoundToInt(volume * 100);
+        volumePercentageText.text = $"{volumePercentage}%";
     }
 }
