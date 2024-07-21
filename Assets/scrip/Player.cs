@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private float jumping = 10f;
     [SerializeField] private float movespeed = 5f;
+    [SerializeField] private TextMeshProUGUI textmoney;
+    private int money = 0;
     private float horizontal;
     private bool Rightmoving = true;
     private Rigidbody2D rb;
@@ -44,14 +47,23 @@ public class Player : MonoBehaviour
 
         }
     }
-    private void Flip()
+    void Flip()
     {
-        if (Rightmoving && horizontal < 0f || Rightmoving && horizontal > 0f)
+        if (Rightmoving && horizontal < 0f || !Rightmoving && horizontal > 0f)
         {
             Rightmoving = !Rightmoving;
             Vector3 localScale = transform.localScale;
             localScale.x *= -1f;
             transform.localScale = localScale;
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("money"))
+        {
+            Destroy(other.gameObject);
+            money++;
+            textmoney.text = "x " +money.ToString(); 
         }
     }
 }
