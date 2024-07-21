@@ -2,9 +2,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using TMPro;
+using Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
+    private bool isTimeStopped = false;
+    private bool isTimeStopOnCooldown = false;
+    private float previousFixedDeltaTime;
     public float walkSpeed = 5f;
     public float runSpeed = 8f;
     public float jumpForce = 7f;
@@ -33,7 +37,7 @@ public class PlayerController : MonoBehaviour
     public GameObject projectilePrefab; // Reference to the projectile prefab
     public Transform firePoint; // Reference to the point from which the projectile is fired
     public float bulletForce = 20f; // Editable force for the projectile
-    public float firePointDistance = 1f; // Distance of firePoint from the player
+    public float bulletRadius = 1.5f; // New radius for bullet fire point
 
     public Sprite[] weaponSprites; // Array to store weapon sprites
     private int currentWeaponIndex = 0; // Track the current weapon index
@@ -51,6 +55,14 @@ public class PlayerController : MonoBehaviour
     public LayerMask climbableLayer; // Layer for climbable objects
     private bool isClimbing = false;
 
+    // Shoot effect variables
+    public GameObject shootEffectPrefab; // Reference to the shoot effect prefab
+    public Transform shootEffectPoint; // Reference to the point where shoot effect will appear
+
+    // Time stop audio
+    public AudioSource timeStopAudio; // Reference to the audio source for time stop
+    public CinemachineVirtualCamera virtualCamera;
+    private CinemachineImpulseSource impulseSource;
     void Start()
     {
         // Existing code
@@ -64,6 +76,10 @@ public class PlayerController : MonoBehaviour
         UpdateHealthBar();
         UpdateArmAndGunSprites();
         UpdateGoldText(); // Update gold text on start
+        previousFixedDeltaTime = Time.fixedDeltaTime;
+
+        // Initialize Cinemachine Impulse Source
+        impulseSource = virtualCamera.GetComponent<CinemachineImpulseSource>();
     }
 
     void Update()
@@ -165,6 +181,10 @@ public class PlayerController : MonoBehaviour
         CheckGrounded();
         CheckClimbable(); // Check if the player can climb
         UpdateAnimator();
+        if (Input.GetKeyDown(KeyCode.T) && !isTimeStopOnCooldown)
+        {
+            ToggleTimeStop();
+        }
     }
 
     void CheckGrounded()
@@ -176,7 +196,70 @@ public class PlayerController : MonoBehaviour
             isDoubleJumping = false;
         }
     }
+    void ToggleTimeStop()
+    {
+        isTimeStopped = !isTimeStopped;
 
+        if (isTimeStopped)
+        {
+            Time.timeScale = 0f; // Stop time
+            Time.fixedDeltaTime = 0f; // Stop physics updates
+            PauseAllAnimations();
+            if (timeStopAudio != null)
+            {
+                timeStopAudio.Play(); // Play time stop audio
+            }
+            impulseSource.GenerateImpulse(); // Trigger camera shake
+        }
+        else
+        {
+            Time.timeScale = 1f; // Resume time
+            Time.fixedDeltaTime = previousFixedDeltaTime; // Resume physics updates
+            ResumeAllAnimations();
+            StartCoroutine(TimeStopCooldown()); // Start cooldown after disabling time stop
+        }
+    }
+    void PauseAllAnimations()
+    {
+        Animator[] animators = FindObjectsOfType<Animator>();
+        foreach (Animator anim in animators)
+        {
+            if (anim.gameObject != gameObject && anim.gameObject != shootEffectPrefab) // Skip the player and shoot effect
+            {
+                anim.enabled = false;
+            }
+        }
+
+        Rigidbody2D[] rigidbodies = FindObjectsOfType<Rigidbody2D>();
+        foreach (Rigidbody2D rb in rigidbodies)
+        {
+            if (rb.gameObject != gameObject) // Skip the player
+            {
+                rb.simulated = false;
+            }
+        }
+    }
+
+    void ResumeAllAnimations()
+    {
+        Animator[] animators = FindObjectsOfType<Animator>();
+        foreach (Animator anim in animators)
+        {
+            if (anim.gameObject != gameObject && anim.gameObject != shootEffectPrefab) // Skip the player and shoot effect
+            {
+                anim.enabled = true;
+            }
+        }
+
+        Rigidbody2D[] rigidbodies = FindObjectsOfType<Rigidbody2D>();
+        foreach (Rigidbody2D rb in rigidbodies)
+        {
+            if (rb.gameObject != gameObject) // Skip the player
+            {
+                rb.simulated = true;
+            }
+        }
+    }
     void CheckClimbable()
     {
         Collider2D climbable = Physics2D.OverlapCircle(climbCheck.position, 0.2f, climbableLayer);
@@ -218,6 +301,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsGunMode", isGunMode);
         animator.SetBool("IsDoubleJumping", isDoubleJumping); // Add this line
         animator.SetBool("IsClimbing", isClimbing); // Add this line
+        animator.SetBool("IsFalling", !isGrounded && rb.velocity.y < 0); // Add this line
 
         if (isGunMode)
         {
@@ -285,6 +369,14 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(direction * bulletForce, ForceMode2D.Impulse);
             animator.SetTrigger("Shoot");
 
+            // Create shoot effect
+            if (shootEffectPrefab != null)
+            {
+                GameObject shootEffect = Instantiate(shootEffectPrefab, shootEffectPoint.position, shootEffectPoint.rotation);
+                shootEffect.transform.parent = shootEffectPoint;
+                Destroy(shootEffect, 0.5f); // Destroy the effect after 0.5 seconds
+            }
+
             // Destroy the projectile after 1 second
             Destroy(projectile, 1f);
         }
@@ -350,16 +442,26 @@ public class PlayerController : MonoBehaviour
         }
 
         armGameObject.transform.localPosition = circlePosition;
-        gunGameObject.transform.localPosition = circlePosition;
+        gunGameObject.transform.localPosition = circlePosition; // Ensure gun follows the arm
 
         // Adjust arm and gun rotation based on the angle
         armGameObject.transform.localRotation = Quaternion.Euler(0, 0, angle);
-        gunGameObject.transform.localRotation = Quaternion.Euler(0, 0, angle);
+        gunGameObject.transform.localRotation = Quaternion.Euler(0, 0, angle); // Ensure gun rotates with the arm
 
-        float distance = Mathf.Min(direction.magnitude, circleRadius);
+        // Adjust fire point and shoot effect point based on the bullet radius
+        float distance = Mathf.Min(direction.magnitude, bulletRadius);
         Vector3 firePointPosition = transform.position + (Vector3)direction.normalized * distance;
         firePoint.position = firePointPosition;
+        shootEffectPoint.position = firePointPosition;
+
+        // Adjust the rotation of the fire point and shoot effect point
+        firePoint.rotation = Quaternion.Euler(0, 0, angle);
+        shootEffectPoint.rotation = Quaternion.Euler(0, 0, angle);
+
+        // Flip the shoot effect point based on isFlipped
+        shootEffectPoint.localScale = new Vector3(isFlipped ? -1 : 1, 1, 1);
     }
+
 
     public void AddGold(int amount)
     {
@@ -402,5 +504,12 @@ public class PlayerController : MonoBehaviour
         {
             buttonTransform.gameObject.SetActive(true);
         }
+    }
+
+    private IEnumerator TimeStopCooldown()
+    {
+        isTimeStopOnCooldown = true;
+        yield return new WaitForSeconds(5f); // 5 second cooldown
+        isTimeStopOnCooldown = false;
     }
 }

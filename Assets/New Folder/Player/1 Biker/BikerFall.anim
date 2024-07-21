@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BikerJump
+  m_Name: BikerFall
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,13 +21,9 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -126058286, guid: cc5f2207cf1906346b67488d5f7e27b3, type: 3}
-    - time: 0.25
-      value: {fileID: 2114456590, guid: cc5f2207cf1906346b67488d5f7e27b3, type: 3}
-    - time: 0.4
-      value: {fileID: -126058286, guid: cc5f2207cf1906346b67488d5f7e27b3, type: 3}
-    - time: 0.41666666
-      value: {fileID: 2114456590, guid: cc5f2207cf1906346b67488d5f7e27b3, type: 3}
+      value: {fileID: 235579435, guid: cc5f2207cf1906346b67488d5f7e27b3, type: 3}
+    - time: 0.033333335
+      value: {fileID: -484467552, guid: cc5f2207cf1906346b67488d5f7e27b3, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -50,16 +46,14 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: -126058286, guid: cc5f2207cf1906346b67488d5f7e27b3, type: 3}
-    - {fileID: 2114456590, guid: cc5f2207cf1906346b67488d5f7e27b3, type: 3}
-    - {fileID: -126058286, guid: cc5f2207cf1906346b67488d5f7e27b3, type: 3}
-    - {fileID: 2114456590, guid: cc5f2207cf1906346b67488d5f7e27b3, type: 3}
+    - {fileID: 235579435, guid: cc5f2207cf1906346b67488d5f7e27b3, type: 3}
+    - {fileID: -484467552, guid: cc5f2207cf1906346b67488d5f7e27b3, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.43333334
+    m_StopTime: 0.083333336
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -78,4 +72,11 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.083333336
+    functionName: 
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
