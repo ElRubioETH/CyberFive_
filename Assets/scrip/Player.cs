@@ -4,35 +4,54 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private float jumping = 10f;
     [SerializeField] private float movespeed = 5f;
-    [SerializeField] private GameObject Open_chest;
-    // Start is called before the first frame update
-    void Start()
+    private float horizontal;
+    private bool Rightmoving = true;
+    private Rigidbody2D rb;
+    public Transform ground_check;    
+    public LayerMask ground_layer;
+    private bool IsGrounded;
+    private void Start()
     {
-       
+        rb = GetComponent<Rigidbody2D>();
     }
-
     // Update is called once per frame
     void Update()
     {
-        move();
-        OpenChest();
+        horizontal = Input.GetAxisRaw("Horizontal");
+        rb.velocity = new Vector2(horizontal * movespeed, rb.velocity.y);
 
-    }
-    public void move()
-    {
-        var move = Input.GetAxis("Horizontal");
-        transform.localPosition += new Vector3(move, 0, 0) * movespeed * Time.deltaTime;
-    }
-    public void OpenChest()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetButtonDown("Jump"))
         {
-            Open_chest.SetActive(true);
+            if (IsGrounded)
+            {
+                Jump();
+            }
         }
-        if (Input.GetKeyDown(KeyCode.C))
+        Flip();
+        Check_Grounded();
+    }
+    void Jump()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, jumping);
+    }
+    void Check_Grounded()
+    {
+        IsGrounded = Physics2D.OverlapCircle(ground_check.position, 0.2f, ground_layer);    
+        if(IsGrounded)
         {
-            Open_chest.SetActive(false);
+
+        }
+    }
+    private void Flip()
+    {
+        if (Rightmoving && horizontal < 0f || Rightmoving && horizontal > 0f)
+        {
+            Rightmoving = !Rightmoving;
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1f;
+            transform.localScale = localScale;
         }
     }
 }
