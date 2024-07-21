@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 using Cinemachine;
+using JetBrains.Annotations;
 
 public class PlayerController : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour
     private bool isDoubleJumping; // Flag to track double jump state
     private int maxHealth = 100;
     private int currentHealth;
+    private bool isTakeDamage;
 
     public GameObject projectilePrefab; // Reference to the projectile prefab
     public Transform firePoint; // Reference to the point from which the projectile is fired
@@ -80,6 +82,7 @@ public class PlayerController : MonoBehaviour
 
         // Initialize Cinemachine Impulse Source
         impulseSource = virtualCamera.GetComponent<CinemachineImpulseSource>();
+
     }
 
     void Update()
@@ -135,6 +138,11 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        
+        
+        
+
+
 
         if (Input.GetButtonDown("Fire1"))
         {
@@ -331,12 +339,13 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        animator.SetTrigger("TakeDamage");
+        
         UpdateHealthBar();
         if (currentHealth <= 0)
         {
             Die();
         }
+        
     }
 
     void UpdateHealthBar()
@@ -347,15 +356,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Die()
+    public void Die()
     {
         animator.SetTrigger("Die");
-        // Disable player controls
-        this.enabled = false;
-        rb.velocity = Vector2.zero;
-        rb.isKinematic = true;
-        // Optionally, destroy the player object after some time
-        // Destroy(gameObject, 2f);
+        rb.velocity = Vector2.zero; // Stop player movement
+        this.enabled = false; // Disable the script
     }
 
     void Shoot()
@@ -512,4 +517,26 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(5f); // 5 second cooldown
         isTimeStopOnCooldown = false;
     }
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            currentHealth -= 20;
+            animator.SetBool("TakeDamage", isTakeDamage);
+            if (currentHealth <= 0)
+            {
+                currentHealth = 0;
+                // Handle player death  
+            }
+            UpdateHealthBar();
+        }
+        void UpdateHealthBar()
+        {
+            healthBar.value = (float)currentHealth / maxHealth;
+            
+        }
+
+    }
+
+
 }

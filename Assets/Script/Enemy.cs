@@ -38,7 +38,7 @@ public class Enemy : MonoBehaviour
             PlayerController playerController = other.GetComponent<PlayerController>();
             if (playerController != null)
             {
-                playerController.TakeDamage(10); // Example damage value
+                playerController.TakeDamage(20); // Change this to 20 for -20 health
             }
         }
         else if (other.CompareTag("Projectile"))
