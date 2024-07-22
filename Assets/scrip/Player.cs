@@ -42,10 +42,6 @@ public class Player : MonoBehaviour
     void Check_Grounded()
     {
         IsGrounded = Physics2D.OverlapCircle(ground_check.position, 0.2f, ground_layer);    
-        if(IsGrounded)
-        {
-
-        }
     }
     void Flip()
     {

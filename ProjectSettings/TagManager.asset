@@ -6,6 +6,7 @@ TagManager:
   tags:
   - item
   - money
+  - cyborg
   layers:
   - Default
   - TransparentFX
