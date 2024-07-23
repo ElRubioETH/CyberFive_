@@ -17,19 +17,28 @@ public class ShopManager : MonoBehaviour
 
         if (shopPanel != null)
         {
-            for (int i = 0; i < weaponNames.Length; i++)
+            GameObject buttonContainer = shopPanel.transform.Find("ButtonContainer")?.gameObject;
+            if (buttonContainer != null)
             {
-                int index = i;
-                string buttonName = "WeaponButton" + (i + 1);
-                AssignButtonAction(shopPanel, buttonName, () => BuyWeapon(index));
-            }
+                for (int i = 0; i < weaponNames.Length; i++)
+                {
+                    int index = i;
+                    string buttonName = "WeaponButton" + (i + 1);
+                    AssignButtonAction(buttonContainer, buttonName, () => BuyWeapon(index));
+                }
 
-            AssignButtonAction(shopPanel, "CloseButton", CloseShop);
+                AssignButtonAction(buttonContainer, "CloseButton", CloseShop);
+            }
+            else
+            {
+                Debug.LogError("ButtonContainer is not found in the Shop Panel.");
+            }
         }
         else
         {
             Debug.LogError("Shop Panel is not assigned in the inspector.");
         }
+
     }
 
     private void AssignButtonAction(GameObject panel, string buttonName, UnityEngine.Events.UnityAction action)

@@ -22,13 +22,22 @@ public class GameManager : MonoBehaviour
 
         if (menuPanel != null)
         {
-            AssignButtonAction(menuPanel, "ResumeButton", ResumeGame);
-            AssignButtonAction(menuPanel, "SaveButton", SaveGame);
-            AssignButtonAction(menuPanel, "LoadButton", LoadGame);
-            AssignButtonAction(menuPanel, "SettingsButton", OpenSettings);
-            AssignButtonAction(menuPanel, "MainMenuButton", BackToMainMenu);
-            AssignButtonAction(menuPanel, "ExitButton", ExitGame);
+            GameObject buttonContainer = menuPanel.transform.Find("ButtonContainer")?.gameObject;
+            if (buttonContainer != null)
+            {
+                AssignButtonAction(buttonContainer, "ResumeButton", ResumeGame);
+                AssignButtonAction(buttonContainer, "SaveButton", SaveGame);
+                AssignButtonAction(buttonContainer, "LoadButton", LoadGame);
+                AssignButtonAction(buttonContainer, "SettingsButton", OpenSettings);
+                AssignButtonAction(buttonContainer, "MainMenuButton", BackToMainMenu);
+                AssignButtonAction(buttonContainer, "ExitButton", ExitGame);
+            }
+            else
+            {
+                Debug.LogError("ButtonContainer is not found in the Menu Panel.");
+            }
         }
+
         else
         {
             Debug.LogError("Menu Panel is not assigned in the inspector.");

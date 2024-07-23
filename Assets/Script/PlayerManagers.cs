@@ -4,6 +4,8 @@ using System.Collections;
 using TMPro;
 using Cinemachine;
 using JetBrains.Annotations;
+using System.Collections.Generic;
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -22,6 +24,9 @@ public class PlayerController : MonoBehaviour
     public GameObject gunGameObject; // Reference to the gun GameObject
     public Sprite armSprite; // Sprite for the arm
 
+    private bool isFiring = false;
+    public float fireRate = 0.2f; // Adjust this value to change the fire rate
+
     private Rigidbody2D rb;
     private SpriteRenderer bodySpriteRenderer;
     private SpriteRenderer armSpriteRenderer;
@@ -35,6 +40,9 @@ public class PlayerController : MonoBehaviour
     private int maxHealth = 100;
     private int currentHealth;
     private bool isTakeDamage;
+    public List<GameObject> ignoreTimeStopObjects;
+    public TMP_Text goldSpentText; // Reference to the TextMeshPro text element for displaying spent gold
+    public Animator goldSpentAnimator; // Reference to the Animator for the gold spent text
 
     public GameObject projectilePrefab; // Reference to the projectile prefab
     public Transform firePoint; // Reference to the point from which the projectile is fired
@@ -43,6 +51,9 @@ public class PlayerController : MonoBehaviour
 
     public Sprite[] weaponSprites; // Array to store weapon sprites
     private int currentWeaponIndex = 0; // Track the current weapon index
+    public float[] weaponDamageValues; // Array to store damage values for each weapon
+    private float currentWeaponDamage; // Variable to store the current weapon's damage
+
 
     public float circleRadius = 1.5f; // Radius of the circle around the player, adjustable
 
@@ -65,6 +76,7 @@ public class PlayerController : MonoBehaviour
     public AudioSource timeStopAudio; // Reference to the audio source for time stop
     public CinemachineVirtualCamera virtualCamera;
     private CinemachineImpulseSource impulseSource;
+
     void Start()
     {
         // Existing code
@@ -82,6 +94,7 @@ public class PlayerController : MonoBehaviour
 
         // Initialize Cinemachine Impulse Source
         impulseSource = virtualCamera.GetComponent<CinemachineImpulseSource>();
+        goldSpentText.gameObject.SetActive(false);
 
     }
 
@@ -159,6 +172,7 @@ public class PlayerController : MonoBehaviour
                 armGameObject.transform.localRotation = Quaternion.identity;
                 gunGameObject.transform.localRotation = Quaternion.identity;
                 animator.SetInteger("GunDirection", 0);
+
             }
         }
         if (Input.GetKeyDown(KeyCode.H)) // Key to switch to default mode
@@ -180,11 +194,17 @@ public class PlayerController : MonoBehaviour
         if (isGunMode)
         {
             AimAtMouse();
-            if (Input.GetKeyDown(KeyCode.F)) // Key to shoot
+            if (Input.GetKeyDown(KeyCode.F)) // Key to start firing
             {
-                Shoot();
+                isFiring = true;
+                StartCoroutine(AutoFire());
+            }
+            else if (Input.GetKeyUp(KeyCode.F)) // Key to stop firing
+            {
+                isFiring = false;
             }
         }
+
 
         CheckGrounded();
         CheckClimbable(); // Check if the player can climb
@@ -194,7 +214,10 @@ public class PlayerController : MonoBehaviour
             ToggleTimeStop();
         }
     }
-
+    bool IsIgnoredByTimeStop(GameObject obj)
+    {
+        return ignoreTimeStopObjects.Contains(obj);
+    }
     void CheckGrounded()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
@@ -232,7 +255,7 @@ public class PlayerController : MonoBehaviour
         Animator[] animators = FindObjectsOfType<Animator>();
         foreach (Animator anim in animators)
         {
-            if (anim.gameObject != gameObject && anim.gameObject != shootEffectPrefab) // Skip the player and shoot effect
+            if (anim.gameObject != gameObject && anim.gameObject != shootEffectPrefab && !ignoreTimeStopObjects.Contains(anim.gameObject)) // Skip the player, shoot effect, and ignored objects
             {
                 anim.enabled = false;
             }
@@ -241,19 +264,21 @@ public class PlayerController : MonoBehaviour
         Rigidbody2D[] rigidbodies = FindObjectsOfType<Rigidbody2D>();
         foreach (Rigidbody2D rb in rigidbodies)
         {
-            if (rb.gameObject != gameObject) // Skip the player
+            if (rb.gameObject != gameObject && !ignoreTimeStopObjects.Contains(rb.gameObject)) // Skip the player and ignored objects
             {
                 rb.simulated = false;
             }
         }
     }
 
+
+
     void ResumeAllAnimations()
     {
         Animator[] animators = FindObjectsOfType<Animator>();
         foreach (Animator anim in animators)
         {
-            if (anim.gameObject != gameObject && anim.gameObject != shootEffectPrefab) // Skip the player and shoot effect
+            if (anim.gameObject != gameObject && anim.gameObject != shootEffectPrefab && !ignoreTimeStopObjects.Contains(anim.gameObject)) // Skip the player, shoot effect, and ignored objects
             {
                 anim.enabled = true;
             }
@@ -262,12 +287,14 @@ public class PlayerController : MonoBehaviour
         Rigidbody2D[] rigidbodies = FindObjectsOfType<Rigidbody2D>();
         foreach (Rigidbody2D rb in rigidbodies)
         {
-            if (rb.gameObject != gameObject) // Skip the player
+            if (rb.gameObject != gameObject && !ignoreTimeStopObjects.Contains(rb.gameObject)) // Skip the player and ignored objects
             {
                 rb.simulated = true;
             }
         }
     }
+
+
     void CheckClimbable()
     {
         Collider2D climbable = Physics2D.OverlapCircle(climbCheck.position, 0.2f, climbableLayer);
@@ -302,6 +329,15 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsAttacking", false);
         isAttacking = false;
     }
+    private IEnumerator AutoFire()
+    {
+        while (isFiring)
+        {
+            Shoot();
+            yield return new WaitForSeconds(fireRate);
+        }
+    }
+
 
     void UpdateAnimator()
     {
@@ -368,6 +404,13 @@ public class PlayerController : MonoBehaviour
         if (firePoint != null && projectilePrefab != null)
         {
             GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+            ProjectileController projectileController = projectile.GetComponent<ProjectileController>();
+
+            if (projectileController != null)
+            {
+                projectileController.SetDamage(currentWeaponDamage);
+            }
+
             Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 direction = (mousePosition - firePoint.position).normalized;
@@ -386,6 +429,7 @@ public class PlayerController : MonoBehaviour
             Destroy(projectile, 1f);
         }
     }
+
 
     void UpdateArmAndGunSprites()
     {
@@ -409,6 +453,7 @@ public class PlayerController : MonoBehaviour
         {
             currentWeaponIndex = weaponIndex; // Update the current weapon index
             gunSpriteRenderer.sprite = weaponSprites[weaponIndex];
+            currentWeaponDamage = weaponDamageValues[weaponIndex]; // Update the current weapon's damage
             animator.SetInteger("WeaponIndex", weaponIndex);
             Debug.Log($"Weapon changed to: {weaponIndex}");
 
@@ -422,6 +467,51 @@ public class PlayerController : MonoBehaviour
             Debug.LogError($"Weapon index {weaponIndex} is out of bounds.");
         }
     }
+
+    public void BuyWeapon(int weaponIndex, int weaponCost)
+    {
+        Debug.Log("Attempting to buy weapon...");
+        if (gold >= weaponCost)
+        {
+            gold -= weaponCost;
+            UpdateGoldText();
+            Debug.Log("Gold deducted. Current gold: " + gold);
+            StartCoroutine(DisplayGoldSpentMessage(weaponCost));
+            ChangeWeapon(weaponIndex);
+        }
+        else
+        {
+            Debug.Log("Not enough gold to buy this weapon.");
+        }
+    }
+
+
+
+    private IEnumerator DisplayGoldSpentMessage(int amount)
+    {
+        Debug.Log("Displaying gold spent message...");
+        goldSpentText.text = $"-{amount} Gold";
+        goldSpentText.gameObject.SetActive(true);
+        Debug.Log("Gold spent text set to active.");
+
+        // Trigger the animation
+        if (goldSpentAnimator != null)
+        {
+            goldSpentAnimator.SetTrigger("ShowGoldSpent");
+            Debug.Log("Gold spent animator trigger activated.");
+        }
+        else
+        {
+            Debug.LogWarning("Gold spent animator is not assigned.");
+        }
+
+        yield return new WaitForSeconds(2.5f);
+        goldSpentText.gameObject.SetActive(false);
+        Debug.Log("Gold spent text set to inactive.");
+    }
+
+
+
 
     void AimAtMouse()
     {
@@ -471,7 +561,7 @@ public class PlayerController : MonoBehaviour
     public void AddGold(int amount)
     {
         gold += amount;
-        Debug.Log($"Gold: {gold}");
+        Debug.Log($"X{gold}");
         UpdateGoldText(); // Update gold text whenever gold amount changes
     }
 
@@ -480,7 +570,7 @@ public class PlayerController : MonoBehaviour
     {
         if (goldText != null)
         {
-            goldText.text = "Gold: " + gold;
+            goldText.text = "X" + gold;
         }
     }
 

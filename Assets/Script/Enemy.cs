@@ -7,7 +7,6 @@ public class Enemy : MonoBehaviour
     public int health = 100;
     public int maxHealth = 100; // Maximum health for the slider
     public int goldReward = 100; // Gold given when the enemy dies
-    public int damageFromProjectile = 50; // Damage taken from player projectiles
     public Slider healthBar; // Reference to the health bar slider
     public Slider delayedHealthBar; // Reference to the delayed health bar slider
     public float healthBarUpdateDuration = 1.5f; // Duration for the health bar to update
@@ -41,16 +40,12 @@ public class Enemy : MonoBehaviour
                 playerController.TakeDamage(20); // Change this to 20 for -20 health
             }
         }
-        else if (other.CompareTag("Projectile"))
-        {
-            TakeDamage(damageFromProjectile);
-            Destroy(other.gameObject); // Destroy the projectile on hit
-        }
     }
 
-    public void TakeDamage(int damage)
+
+    public void TakeDamage(float damage)
     {
-        health -= damage;
+        health -= (int)damage;
         lastDamageTime = Time.time;
         if (healthBar != null)
         {
