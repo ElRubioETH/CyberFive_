@@ -17,7 +17,7 @@ TagManager:
   - Player
   - Ground
   - Item
-  - 
+  - Ladder
   - 
   - 
   - 
@@ -74,15 +74,18 @@ TagManager:
   - name: Ghe
     uniqueID: 3604297913
     locked: 0
-  - name: Player
-    uniqueID: 452491959
-    locked: 0
   - name: UI
     uniqueID: 1106347275
     locked: 0
   - name: Item
     uniqueID: 3852926795
     locked: 0
-  - name: Hand
+  - name: Ladder
     uniqueID: 2251187375
+    locked: 0
+  - name: Enemies
+    uniqueID: 2448410475
+    locked: 0
+  - name: Player
+    uniqueID: 452491959
     locked: 0

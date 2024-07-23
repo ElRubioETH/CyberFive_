@@ -1,15 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using static UnityEditor.Progress;
 
 [RequireComponent(typeof(BoxCollider2D))]
 
 public class Item : MonoBehaviour
 {
     public enum InteractionType { NONE,PickUp,Examine}
-    public InteractionType type;
+    public enum ItemType { Static, Consumables }
+    [Header("Attibutes")]
+    public InteractionType interactType;
+    public ItemType type;
     [Header("Examine")]
     public string discriptionText;
+    [Header("Custom Event")]
+    public UnityEvent consumeEvent;
     public Sprite image;
     //Collider Trigger 
     //Interaction Type
@@ -20,11 +27,11 @@ public class Item : MonoBehaviour
     }
     public void Interact()
     {
-        switch (type)
+        switch (interactType)
         {
             case InteractionType.PickUp:
                 //Add the object to the PickUpItem list
-                FindObjectOfType<InteractionSystem>().PickUpItem(gameObject);
+                FindObjectOfType<InventorySystem>().PickUp(gameObject);
                 //Disable
                 gameObject.SetActive(false);
                 Debug.Log("Pick Up");

@@ -20,9 +20,7 @@ public class InteractionSystem : MonoBehaviour
     public GameObject examineWindow;
     public Image examineImage;
     public TextMeshProUGUI examineText;
-    [Header("Others")]
-    //List of picked items
-    public List<GameObject> pickedItems = new List<GameObject>();
+    public bool isExamning;
 
 
     // Update is called once per frame
@@ -59,17 +57,27 @@ public class InteractionSystem : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(detectionPoint.position,detectionRadius);
     }
-    public void PickUpItem(GameObject item)
-    {
-        pickedItems.Add(item);
-    }
     public void ExamineItem(Item item)
     {
-        //Show the item's in the middle
-        examineImage.sprite = item.GetComponent<SpriteRenderer>().sprite;
-        //Write the discription text underneath the image
-        examineText.text = item.discriptionText;
-        //Display an Examine Window
-        examineWindow.SetActive(true);
+        if(isExamning)
+        {
+            Debug.Log("Close");
+            //Hide the Examine Window
+            examineWindow.SetActive(false);
+            //Disable the boolean
+            isExamning = false;
+        }
+        else
+        {
+            Debug.Log("Examine");
+            //Show the item's in the middle
+            examineImage.sprite = item.GetComponent<SpriteRenderer>().sprite;
+            //Write the discription text underneath the image
+            examineText.text = item.discriptionText;
+            //Display an Examine Window
+            examineWindow.SetActive(true);
+            //Enable the boolean
+            isExamning = true;
+        }
     }
 }

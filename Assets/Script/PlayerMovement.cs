@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     Animator anim;
     [SerializeField] Transform groundCheckCollider;
     [SerializeField] LayerMask groundLayer;
+    [SerializeField] LayerMask climbableLayer;
 
     public Transform firePoint;
     public GameObject bulletPrefab;
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int totalJumps;
     int availableJumps;
     float horizontalValue;
+    float verticalValue;
     float runSpeedModifier = 2f;
 
     [SerializeField] bool isGrounded;
@@ -39,8 +41,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(CanMove() == false)
+            return;
         //Store the horizontal value
         horizontalValue = Input.GetAxisRaw("Horizontal");
+        verticalValue = Input.GetAxisRaw("Vertical");
 
         //If Lshift is clicked enable isRunning
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -169,10 +174,18 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("xVelocity", Mathf.Abs(rb.velocity.x));
         #endregion
     }
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(groundCheckCollider.position, groundCheckRadius);
+    }
+    bool CanMove()
+    {
+        bool can = true;
+        if(FindAnyObjectByType<InteractionSystem>().isExamning)
+            can = false;
+        if (FindAnyObjectByType<InventorySystem>().isOpen)
+            can = false;
+        return can;
     }
 }
