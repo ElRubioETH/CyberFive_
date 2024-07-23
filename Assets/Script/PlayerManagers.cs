@@ -41,8 +41,7 @@ public class PlayerController : MonoBehaviour
     private int currentHealth;
     private bool isTakeDamage;
     public List<GameObject> ignoreTimeStopObjects;
-    public TMP_Text goldSpentText; // Reference to the TextMeshPro text element for displaying spent gold
-    public Animator goldSpentAnimator; // Reference to the Animator for the gold spent text
+    
 
     public GameObject projectilePrefab; // Reference to the projectile prefab
     public Transform firePoint; // Reference to the point from which the projectile is fired
@@ -94,7 +93,7 @@ public class PlayerController : MonoBehaviour
 
         // Initialize Cinemachine Impulse Source
         impulseSource = virtualCamera.GetComponent<CinemachineImpulseSource>();
-        goldSpentText.gameObject.SetActive(false);
+       
 
     }
 
@@ -471,12 +470,20 @@ public class PlayerController : MonoBehaviour
     public void BuyWeapon(int weaponIndex, int weaponCost)
     {
         Debug.Log("Attempting to buy weapon...");
+        Debug.Log($"Current Gold: {gold}, Weapon Cost: {weaponCost}");
+
         if (gold >= weaponCost)
         {
+            // Deduct the cost of the weapon from the gold
             gold -= weaponCost;
+
+            Debug.Log($"Gold after deduction: {gold}");
+
+            // Update the gold text to reflect the new amount
             UpdateGoldText();
-            Debug.Log("Gold deducted. Current gold: " + gold);
-            StartCoroutine(DisplayGoldSpentMessage(weaponCost));
+            Debug.Log("Gold text updated.");
+
+            // Change the weapon to the selected one
             ChangeWeapon(weaponIndex);
         }
         else
@@ -487,28 +494,9 @@ public class PlayerController : MonoBehaviour
 
 
 
-    private IEnumerator DisplayGoldSpentMessage(int amount)
-    {
-        Debug.Log("Displaying gold spent message...");
-        goldSpentText.text = $"-{amount} Gold";
-        goldSpentText.gameObject.SetActive(true);
-        Debug.Log("Gold spent text set to active.");
 
-        // Trigger the animation
-        if (goldSpentAnimator != null)
-        {
-            goldSpentAnimator.SetTrigger("ShowGoldSpent");
-            Debug.Log("Gold spent animator trigger activated.");
-        }
-        else
-        {
-            Debug.LogWarning("Gold spent animator is not assigned.");
-        }
 
-        yield return new WaitForSeconds(2.5f);
-        goldSpentText.gameObject.SetActive(false);
-        Debug.Log("Gold spent text set to inactive.");
-    }
+
 
 
 
@@ -572,7 +560,13 @@ public class PlayerController : MonoBehaviour
         {
             goldText.text = "X" + gold;
         }
+        else
+        {
+            Debug.LogError("Gold text is not assigned.");
+        }
     }
+
+
 
 
     public void UpdateInventory(int weaponIndex)
