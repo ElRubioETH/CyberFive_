@@ -60,13 +60,24 @@ public class Player : MonoBehaviour
     {
         horizontal = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(horizontal * movespeed, rb.velocity.y);
+        if (horizontal != 0)
+        {
+            animator.SetBool("isrunning", true);
+            animator.SetBool("speedrun", false);
+        }
+        else if (horizontal == 0)
+        {
+            animator.SetBool("isrunning", false);
+            animator.SetBool("speedrun", false);
+        }
         sprite.flipX = rb.velocity.x < 0f;
         if (Input.GetKey(KeyCode.LeftShift))
         {
             horizontal = Input.GetAxisRaw("Horizontal");
             rb.velocity = new Vector2(horizontal * runspeed, rb.velocity.y);
+            animator.SetBool("speedrun", true);
         }
-        /*if (Rightmoving && horizontal < 0f || !Rightmoving && horizontal > 0f)
+/*        if (Rightmoving && horizontal < 0f || !Rightmoving && horizontal > 0f)
         {
             Rightmoving = !Rightmoving;
             Vector3 localScale = transform.localScale;
