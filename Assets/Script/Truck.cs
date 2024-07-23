@@ -6,24 +6,30 @@ public class EnemyTruck : MonoBehaviour
 {
     // Health and damage variables
     public int health = 100;
-    public int maxHealth = 100; // Maximum health for the slider
-    public int goldReward = 100; // Gold given when the enemy dies
-    public int damageFromProjectile = 50; // Damage taken from player projectiles
-    public Slider healthBar; // Reference to the health bar slider
-    public Slider delayedHealthBar; // Reference to the delayed health bar slider
-    public float healthBarUpdateDuration = 1.5f; // Duration for the health bar to update
+    public int maxHealth = 100;
+    public int goldReward = 100;
+    public int damageFromProjectile = 50;
+    public Slider healthBar;
+    public Slider delayedHealthBar;
+    public float healthBarUpdateDuration = 1.5f;
 
-    private float lastDamageTime; // Time when the last damage was taken
-    private bool isUpdatingDelayedHealthBar = false; // Flag to check if the delayed health bar coroutine is running
+    private float lastDamageTime;
+    private bool isUpdatingDelayedHealthBar = false;
 
     // Attack and movement variables
-    public Animator animator; // Ensure to assign this in the Unity Editor
+    public Animator animator;
     public Transform player;
     public float attackCooldown = 2f;
     private float nextAttackTime = 0f;
     private bool playerInRange = false;
 
     private bool isDead = false;
+
+    // Player health management
+    public int playerHealth = 100; // Player's initial health
+    public int maxPlayerHealth = 100; // Player's maximum health
+    public int playerDamage = 20; // Damage dealt to the player by the truck
+    public Slider playerHealthBar;
 
     private void Start()
     {
@@ -42,6 +48,13 @@ public class EnemyTruck : MonoBehaviour
             delayedHealthBar.maxValue = maxHealth;
             delayedHealthBar.value = health;
         }
+
+        // Initialize player health bar
+        if (playerHealthBar != null)
+        {
+            playerHealthBar.maxValue = maxPlayerHealth;
+            playerHealthBar.value = playerHealth;
+        }
     }
 
     private void Update()
@@ -57,35 +70,20 @@ public class EnemyTruck : MonoBehaviour
 
     private void AttackPlayer()
     {
-        Vector2 direction = player.position - transform.position;
-
-        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
-        {
-            // Horizontal attack
-            animator.SetBool("IsStraight", true);
-            animator.SetBool("Is45up", false);
-            animator.SetBool("Is45down", false);
-        }
-        else
-        {
-            if (direction.y > 0)
-            {
-                // Upward attack
-                animator.SetBool("Is45up", true);
-                animator.SetBool("IsStraight", false);
-                animator.SetBool("Is45down", false);
-            }
-            else
-            {
-                // Downward attack
-                animator.SetBool("Is45down", true);
-                animator.SetBool("IsStraight", false);
-                animator.SetBool("Is45up", false);
-            }
-        }
-
-        // Truck attack animation
         animator.SetTrigger("TruckAttack");
+
+        // Damage player
+        playerHealth -= playerDamage;
+        if (playerHealthBar != null)
+        {
+            playerHealthBar.value = playerHealth;
+        }
+
+        if (playerHealth <= 0)
+        {
+            // Player dies (implement player death logic here)
+            Debug.Log("Player died!");
+        }
     }
 
     public void TakeDamage(int damage)
@@ -125,16 +123,8 @@ public class EnemyTruck : MonoBehaviour
     private IEnumerator UpdateDelayedHealthBar()
     {
         isUpdatingDelayedHealthBar = true;
-        while (Time.time - lastDamageTime < 1.0f)
-        {
-            yield return null;
-        }
-
-        if (delayedHealthBar != null)
-        {
-            StartCoroutine(UpdateHealthBar(delayedHealthBar, delayedHealthBar.value, health, healthBarUpdateDuration));
-        }
-
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(UpdateHealthBar(delayedHealthBar, delayedHealthBar.value, health, healthBarUpdateDuration));
         isUpdatingDelayedHealthBar = false;
     }
 
@@ -142,34 +132,28 @@ public class EnemyTruck : MonoBehaviour
     {
         isDead = true;
         animator.SetTrigger("IsDead");
-
-        PlayerController playerController = FindObjectOfType<PlayerController>();
-        if (playerController != null)
-        {
-            playerController.AddGold(goldReward);
-        }
-
+        // Reward player with gold (implement reward logic here)
+        // Destroy enemy truck or disable it
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             playerInRange = true;
-        }
-        else if (collision.CompareTag("PlayerProjectile"))
-        {
-            TakeDamage(damageFromProjectile);
-            Destroy(collision.gameObject); // Destroy the projectile on collision
+            // Stop the truck movement
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if (collision.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             playerInRange = false;
+            // Resume truck movement (implement movement logic here if needed)
         }
     }
 }
+ 

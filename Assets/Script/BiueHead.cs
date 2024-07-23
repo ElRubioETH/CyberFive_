@@ -2,36 +2,39 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class BlueHead : MonoBehaviour
+public class    BiueHead : MonoBehaviour
 {
-    // UFO movement variables
-    public float pointA = -5f;  // X-coordinate of point A
-    public float pointB = 5f;   // X-coordinate of point B
-    public float speed = 2.0f;  // UFO movement speed
-
     // Health and damage variables
     public int health = 100;
-    public int maxHealth = 100; // Maximum health for the slider
-    public int goldReward = 100; // Gold given when the enemy dies
-    public int damageFromProjectile = 50; // Damage taken from player projectiles
-    public Slider healthBar; // Reference to the health bar slider
-    public Slider delayedHealthBar; // Reference to the delayed health bar slider
-    public float healthBarUpdateDuration = 1.5f; // Duration for the health bar to update
+    public int maxHealth = 100;
+    public int goldReward = 100;
+    public int damageFromProjectile = 50;
+    public Slider healthBar;
+    public Slider delayedHealthBar;
+    public float healthBarUpdateDuration = 1.5f;
 
-    private float currentTarget;  // X-coordinate of the current target
-    private Rigidbody2D rb;  // Reference to the UFO's Rigidbody2D
-    private SpriteRenderer spriteRenderer;  // Reference to the UFO's SpriteRenderer
-    private Animator animator; // Reference to the UFO's Animator
-    private float lastDamageTime; // Time when the last damage was taken
-    private bool isUpdatingDelayedHealthBar = false; // Flag to check if the delayed health bar coroutine is running
-    private bool isStandingStill = false; // Flag to check if the UFO is standing still
+    private float lastDamageTime;
+    private bool isUpdatingDelayedHealthBar = false;
 
-    void Start()
+    // Attack and movement variables
+    public Animator animator;
+    public Transform player;
+    public float attackCooldown = 2f;
+    private float nextAttackTime = 0f;
+    private bool playerInRange = false;
+
+    private bool isDead = false;
+
+    // Player health management
+    public int playerHealth = 100; // Player's initial health
+    public int maxPlayerHealth = 100; // Player's maximum health
+    public int playerDamage = 20; // Damage dealt to the player by the truck
+    public Slider playerHealthBar;
+
+    private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
-        currentTarget = pointB;  // Initially, move to point B
+        // Initialize health
+        health = maxHealth;
 
         // Initialize the health bar sliders
         if (healthBar != null)
@@ -45,73 +48,52 @@ public class BlueHead : MonoBehaviour
             delayedHealthBar.maxValue = maxHealth;
             delayedHealthBar.value = health;
         }
-    }
 
-    void Update()
-    {
-        if (!isStandingStill)
+        // Initialize player health bar
+        if (playerHealthBar != null)
         {
-            MoveToTarget();
+            playerHealthBar.maxValue = maxPlayerHealth;
+            playerHealthBar.value = playerHealth;
         }
     }
 
-    void MoveToTarget()
+    private void Update()
     {
-        // Determine direction and flip sprite if necessary
-        float direction = currentTarget > transform.position.x ? 1f : -1f;
-        spriteRenderer.flipX = direction < 0f;
+        if (isDead) return;
 
-        // Move the UFO towards the current target
-        float step = speed * Time.deltaTime;
-        transform.position = new Vector2(Mathf.MoveTowards(transform.position.x, currentTarget, step), transform.position.y);
-
-        // Play run animation while moving
-        animator.SetBool("IsRunning", true);
-
-        // If the UFO is close to the current target, switch target and stand still for 3 seconds
-        if (Mathf.Abs(transform.position.x - currentTarget) < 0.1f)
+        if (playerInRange && Time.time >= nextAttackTime)
         {
-            StartCoroutine(StandStill());
+            AttackPlayer();
+            nextAttackTime = Time.time + attackCooldown;
         }
     }
 
-    IEnumerator StandStill()
+    private void AttackPlayer()
     {
-        // Stop moving and play idle animation
-        isStandingStill = true;
-        animator.SetBool("IsRunning", false);
-        animator.SetBool("IsIdle", true);
+        animator.SetTrigger("TruckAttack");
 
-        // Stand still for 3 seconds
-        yield return new WaitForSeconds(3f);
-
-        // Resume moving
-        animator.SetBool("IsIdle", false);
-        isStandingStill = false;
-        currentTarget = (currentTarget == pointA) ? pointB : pointA;
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
+        // Damage player
+        playerHealth -= playerDamage;
+        if (playerHealthBar != null)
         {
-            PlayerController playerController = other.GetComponent<PlayerController>();
-            if (playerController != null)
-            {
-                playerController.TakeDamage(10); // Example damage value
-            }
+            playerHealthBar.value = playerHealth;
         }
-        else if (other.CompareTag("Projectile"))
+
+        if (playerHealth <= 0)
         {
-            TakeDamage(damageFromProjectile);
-            Destroy(other.gameObject); // Destroy the projectile on hit
+            // Player dies (implement player death logic here)
+            Debug.Log("Player died!");
         }
     }
 
     public void TakeDamage(int damage)
     {
+        if (isDead) return;
+
         health -= damage;
         lastDamageTime = Time.time;
+        animator.SetTrigger("IsTakingDamage");
+
         if (healthBar != null)
         {
             StartCoroutine(UpdateHealthBar(healthBar, healthBar.value, health, healthBarUpdateDuration));
@@ -141,26 +123,36 @@ public class BlueHead : MonoBehaviour
     private IEnumerator UpdateDelayedHealthBar()
     {
         isUpdatingDelayedHealthBar = true;
-        while (Time.time - lastDamageTime < 1.0f)
-        {
-            yield return null;
-        }
-
-        if (delayedHealthBar != null)
-        {
-            StartCoroutine(UpdateHealthBar(delayedHealthBar, delayedHealthBar.value, health, healthBarUpdateDuration));
-        }
-
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(UpdateHealthBar(delayedHealthBar, delayedHealthBar.value, health, healthBarUpdateDuration));
         isUpdatingDelayedHealthBar = false;
     }
 
-    void Die()
+    private void Die()
     {
-        PlayerController playerController = FindObjectOfType<PlayerController>();
-        if (playerController != null)
-        {
-            playerController.AddGold(goldReward);
-        }
+        isDead = true;
+        animator.SetTrigger("IsDead");
+        // Reward player with gold (implement reward logic here)
+        // Destroy enemy truck or disable it
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = true;
+            // Stop the truck movement
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = false;
+            // Resume truck movement (implement movement logic here if needed)
+        }
     }
 }
