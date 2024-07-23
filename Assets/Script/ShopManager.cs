@@ -53,7 +53,7 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    private void BuyWeapon(int weaponIndex)
+    public void BuyWeapon(int weaponIndex)
     {
         if (weaponIndex >= 0 && weaponIndex < weaponSprites.Length)
         {
