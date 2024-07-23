@@ -51,7 +51,7 @@ public class NPC : MonoBehaviour
             }
         }
     }
-    
+
     private void OpenShop()
     {
         if (shopPanel != null)

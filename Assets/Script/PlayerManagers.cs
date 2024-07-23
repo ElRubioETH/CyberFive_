@@ -138,9 +138,9 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        
-        
-        
+
+
+
 
 
 
@@ -339,13 +339,13 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        
+
         UpdateHealthBar();
         if (currentHealth <= 0)
         {
             Die();
         }
-        
+
     }
 
     void UpdateHealthBar()
@@ -475,6 +475,7 @@ public class PlayerController : MonoBehaviour
         UpdateGoldText(); // Update gold text whenever gold amount changes
     }
 
+
     public void UpdateGoldText()
     {
         if (goldText != null)
@@ -482,6 +483,7 @@ public class PlayerController : MonoBehaviour
             goldText.text = "Gold: " + gold;
         }
     }
+
 
     public void UpdateInventory(int weaponIndex)
     {
@@ -511,6 +513,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
     private IEnumerator TimeStopCooldown()
     {
         isTimeStopOnCooldown = true;
@@ -533,7 +536,7 @@ public class PlayerController : MonoBehaviour
         void UpdateHealthBar()
         {
             healthBar.value = (float)currentHealth / maxHealth;
-            
+
         }
 
     }

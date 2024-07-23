@@ -41,6 +41,7 @@ public class ShopManager : MonoBehaviour
             if (button != null)
             {
                 button.onClick.AddListener(action);
+                Debug.Log($"Assigned action to {buttonName}");
             }
             else
             {
@@ -55,8 +56,10 @@ public class ShopManager : MonoBehaviour
 
     public void BuyWeapon(int weaponIndex)
     {
+        Debug.Log($"BuyWeapon called with index {weaponIndex}");
         if (weaponIndex >= 0 && weaponIndex < weaponSprites.Length)
         {
+            Debug.Log($"Player gold: {playerController.gold}, Weapon cost: {weaponCost}");
             if (playerController.gold >= weaponCost)
             {
                 playerController.gold -= weaponCost;
