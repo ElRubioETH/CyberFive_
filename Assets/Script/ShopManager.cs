@@ -17,9 +17,12 @@ public class ShopManager : MonoBehaviour
     public float[] weaponFireRates;
     public GameObject[] weaponDetailPanels;
     private GameObject buttonContainer;
-    public TMP_Text goldChangeText; // Add this line at the top
-    public Animator goldChangeAnimator; // Add this line at the top
-    public float goldChangeDisplayTime = 1.0f; // Add this line at the top
+    public GameObject[] alreadyBoughtPanels;
+    public TMP_Text goldDecreaseText;
+    public TMP_Text notEnoughMoneyText;
+    // Panels to display when each weapon is already bought
+
+
 
 
 
@@ -27,6 +30,7 @@ public class ShopManager : MonoBehaviour
 
     void Start()
     {
+
         playerController = player.GetComponent<PlayerController>();
 
         if (shopPanel != null)
@@ -47,12 +51,15 @@ public class ShopManager : MonoBehaviour
                     entryEnter.eventID = EventTriggerType.PointerEnter;
                     entryEnter.callback.AddListener((eventData) => ShowWeaponDetails(index));
                     trigger.triggers.Add(entryEnter);
+                    buttonContainer = shopPanel.transform.Find("ButtonContainer")?.gameObject;
+
 
                     EventTrigger.Entry entryExit = new EventTrigger.Entry();
                     entryExit.eventID = EventTriggerType.PointerExit;
                     entryExit.callback.AddListener((eventData) => HideWeaponDetails());
                     trigger.triggers.Add(entryExit);
                     buttonContainer = shopPanel.transform.Find("ButtonContainer")?.gameObject;
+
 
 
                 }
@@ -69,6 +76,8 @@ public class ShopManager : MonoBehaviour
             Debug.LogError("Shop Panel is not assigned in the inspector.");
         }
     }
+
+
 
     private void AssignButtonAction(GameObject panel, string buttonName, UnityEngine.Events.UnityAction action)
     {
@@ -106,7 +115,14 @@ public class ShopManager : MonoBehaviour
 
             RectTransform buttonRect = weaponDetailPanels[weaponIndex].GetComponent<RectTransform>();
             buttonRect.position = buttonContainer.transform.Find("WeaponButton" + (weaponIndex + 1)).position;
+
         }
+        if (buttonContainer != null)
+        {
+            RectTransform buttonRect = weaponDetailPanels[weaponIndex].GetComponent<RectTransform>();
+            buttonRect.position = buttonContainer.transform.Find("WeaponButton" + (weaponIndex + 1)).position;
+        }
+
     }
 
 
@@ -118,16 +134,7 @@ public class ShopManager : MonoBehaviour
             panel.SetActive(false);
         }
     }
-    private IEnumerator ShowGoldChange(int goldAmount)
-    {
-        goldChangeText.text = $"-{goldAmount} Bought";
-        goldChangeText.gameObject.SetActive(true);
-        goldChangeAnimator.Play("GoldChangeTextAnimation"); // Trigger the animation
 
-        yield return new WaitForSeconds(goldChangeDisplayTime);
-
-        goldChangeText.gameObject.SetActive(false);
-    }
 
 
 
@@ -142,26 +149,27 @@ public class ShopManager : MonoBehaviour
                 playerController.gold -= weaponCost;
                 playerController.ChangeWeapon(weaponIndex);
                 playerController.ShowWeaponButton(weaponIndex); // Display the purchased weapon button in inventory
-
+                playerController.UpdateGoldText();
                 // Hide the purchased weapon button in the shop panel
                 string buttonName = "WeaponButton" + (weaponIndex + 1);
-                Transform buttonTransform = buttonContainer.transform.Find(buttonName); // Modify this line to use buttonContainer
+                Transform buttonTransform = shopPanel.transform.Find("ButtonContainer")?.Find(buttonName);
                 if (buttonTransform != null)
                 {
-                    buttonTransform.gameObject.SetActive(false);
+                    buttonTransform.GetComponent<Button>().interactable = false;
+
+                }
+                if (weaponIndex >= 0 && weaponIndex < alreadyBoughtPanels.Length && alreadyBoughtPanels[weaponIndex] != null)
+                {
+                    alreadyBoughtPanels[weaponIndex].SetActive(true);
                 }
 
-                // Update gold text in the PlayerController
-                playerController.UpdateGoldText();
-
-                // Show gold change message
-                StartCoroutine(ShowGoldChange(weaponCost)); // Add this line
-
                 Debug.Log($"Weapon bought: {weaponNames[weaponIndex]}");
+                StartCoroutine(ShowGoldDecreaseText(weaponCost));
             }
             else
             {
                 Debug.Log("Not enough gold to buy this weapon.");
+                StartCoroutine(ShowNotEnoughMoneyText());
             }
         }
         else
@@ -169,6 +177,26 @@ public class ShopManager : MonoBehaviour
             Debug.LogError($"Weapon index {weaponIndex} is out of bounds.");
         }
     }
+
+    private IEnumerator ShowGoldDecreaseText(int amount)
+    {
+        goldDecreaseText.text = $"-{amount} Gold";
+        goldDecreaseText.gameObject.SetActive(true);
+        goldDecreaseText.GetComponent<Animator>().Play("GoldDecreaseAnimation");
+        yield return new WaitForSeconds(1); // Display for 1 second
+        goldDecreaseText.gameObject.SetActive(false);
+    }
+
+    private IEnumerator ShowNotEnoughMoneyText()
+    {
+        notEnoughMoneyText.text = "Not Enough Money";
+        notEnoughMoneyText.gameObject.SetActive(true);
+        notEnoughMoneyText.GetComponent<Animator>().Play("NotEnoughMoneyAnimation");
+        yield return new WaitForSeconds(1); // Display for 1 second
+        notEnoughMoneyText.gameObject.SetActive(false);
+    }
+
+
 
 
     private void CloseShop()
