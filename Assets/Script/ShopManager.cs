@@ -1,8 +1,8 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using TMPro;
-using System.Collections;
 
 public class ShopManager : MonoBehaviour
 {
