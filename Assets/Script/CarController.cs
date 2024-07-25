@@ -7,8 +7,10 @@ public class CarController : MonoBehaviour
     public float flyUpSpeed = 3f;
     public float flyDownSpeed = 3f;
     public Animator carAnimator;
-    
     private Rigidbody2D rb;
+    private bool isPlayerNearCar = false;
+    
+
 
     void Start()
     {
@@ -75,6 +77,7 @@ public class CarController : MonoBehaviour
         carScale.x *= -1;
         transform.localScale = carScale;
 
+       
         if (carScale.x > 0)
         {
             carAnimator.SetBool("isFlippedForward", true);
@@ -138,5 +141,25 @@ public class CarController : MonoBehaviour
             carAnimator.SetBool("isFlippedBackward", false);
             carAnimator.SetBool("isFlippedForward", false);
         }
+    }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isPlayerNearCar = true;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isPlayerNearCar = false;
+        }
+    }
+
+    public bool IsPlayerNearCar()
+    {
+        return isPlayerNearCar;
     }
 }

@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         playerController = player.GetComponent<PlayerController>();
+            
+
 
         if (menuPanel != null)
         {
@@ -83,6 +85,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("Volume Slider is not assigned in the inspector.");
         }
+        AssignButtonActions();
     }
 
     void Update()
@@ -96,6 +99,16 @@ public class GameManager : MonoBehaviour
             ToggleInventory();
         }
     }
+    private void AssignButtonActions()
+    {
+        Button[] buttons = inventoryPanel.GetComponentsInChildren<Button>();
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            int index = i;
+            buttons[i].onClick.AddListener(() => SelectWeapon(index));
+        }
+    }
+
 
     void ToggleMenu()
     {

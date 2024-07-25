@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayer;
     public Animator animator;
     public Slider healthBar;
+    private SpriteRenderer gunSpriteRenderer; // Reference to the SpriteRenderer component
+    private int currentWeaponIndex = 0;
 
     public GameObject armGameObject; // Reference to the arm GameObject
     public GameObject gunGameObject; // Reference to the gun GameObject
@@ -30,7 +32,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer bodySpriteRenderer;
     private SpriteRenderer armSpriteRenderer;
-    private SpriteRenderer gunSpriteRenderer;
+    
     private bool isGrounded;
     private bool isAttacking;
     private bool isGunMode;
@@ -51,7 +53,7 @@ public class PlayerController : MonoBehaviour
     public float bulletRadius = 1.5f; // New radius for bullet fire point
 
     public Sprite[] weaponSprites; // Array to store weapon sprites
-    private int currentWeaponIndex = 0; // Track the current weapon index
+
     public float[] weaponDamageValues; // Array to store damage values for each weapon
     private float currentWeaponDamage; // Variable to store the current weapon's damage
 
@@ -98,7 +100,28 @@ public class PlayerController : MonoBehaviour
         if (virtualCamera == null)
         {
             virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+
         }
+        if (gunGameObject != null)
+        {
+            gunSpriteRenderer = gunGameObject.GetComponent<SpriteRenderer>();
+            if (gunSpriteRenderer == null)
+            {
+                Debug.LogError("No SpriteRenderer found on gunGameObject!");
+                return;
+            }
+            if (weaponSprites.Length > 0)
+            {
+                // Set initial weapon sprite
+                gunSpriteRenderer.sprite = weaponSprites[currentWeaponIndex];
+                Debug.Log("Initial weapon sprite set to: " + weaponSprites[currentWeaponIndex].name);
+            }
+        }
+        else
+        {
+            Debug.LogError("gunGameObject is not assigned!");
+        }
+
     }
 
     void Update()
@@ -117,6 +140,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         float moveInput = 0;
+        
 
         if (Input.GetKey(KeyCode.A))
         {
@@ -245,7 +269,7 @@ public class PlayerController : MonoBehaviour
             virtualCamera.LookAt = transform;
             virtualCamera.Follow = transform;
         }
-        else
+        else if (carController.IsPlayerNearCar())
         {
             // Player gets in the car
             transform.position = car.transform.position; // Align player with car position
@@ -259,6 +283,8 @@ public class PlayerController : MonoBehaviour
             virtualCamera.Follow = car.transform;
         }
     }
+
+
 
 
 
@@ -504,6 +530,8 @@ public class PlayerController : MonoBehaviour
             currentWeaponDamage = weaponDamageValues[weaponIndex]; // Update the current weapon's damage
             animator.SetInteger("WeaponIndex", weaponIndex);
             Debug.Log($"Weapon changed to: {weaponIndex}");
+            currentWeaponIndex = weaponIndex;
+            gunSpriteRenderer.sprite = weaponSprites[currentWeaponIndex];
 
             // Equip the weapon
             isGunMode = true;
@@ -614,7 +642,7 @@ public class PlayerController : MonoBehaviour
     {
         if (goldText != null)
         {
-            goldText.text = $"Gold: {gold}";
+            goldText.text = $" {gold}";
         }
     }
 
