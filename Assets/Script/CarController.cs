@@ -9,7 +9,7 @@ public class CarController : MonoBehaviour
     public Animator carAnimator;
     private Rigidbody2D rb;
     private bool isPlayerNearCar = false;
-    
+    public AudioSource carAudioSource;
 
 
     void Start()
@@ -28,12 +28,14 @@ public class CarController : MonoBehaviour
     public void EnterCar()
     {
         isPlayerInCar = true;
+        carAudioSource.Play();
     }
 
     public void ExitCar(Transform playerTransform)
     {
         isPlayerInCar = false;
         playerTransform.position = transform.position; // Align player with car position
+        carAudioSource.Stop();
     }
 
     void HandleCarMovement()
@@ -77,7 +79,7 @@ public class CarController : MonoBehaviour
         carScale.x *= -1;
         transform.localScale = carScale;
 
-       
+
         if (carScale.x > 0)
         {
             carAnimator.SetBool("isFlippedForward", true);
@@ -97,7 +99,7 @@ public class CarController : MonoBehaviour
 
         {
             Vector3 carScale = transform.localScale;
-            
+
             if (carScale.x < 0)
             {
                 carAnimator.SetBool("isFlippedForward", true);
@@ -107,17 +109,17 @@ public class CarController : MonoBehaviour
             }
             else
             {
-            carAnimator.SetBool("isForward", true);
-            carAnimator.SetBool("isBackward", false);
-            carAnimator.SetBool("isIdle", false);
+                carAnimator.SetBool("isForward", true);
+                carAnimator.SetBool("isBackward", false);
+                carAnimator.SetBool("isIdle", false);
             }
-            
-            
+
+
         }
         else if (isBackward)
         {
             Vector3 carScale = transform.localScale;
-            
+
             if (carScale.x < 0)
             {
                 carAnimator.SetBool("isFlippedBackward", true);
@@ -127,9 +129,9 @@ public class CarController : MonoBehaviour
             }
             else
             {
-            carAnimator.SetBool("isForward", false);
-            carAnimator.SetBool("isBackward", true);
-            carAnimator.SetBool("isIdle", false);
+                carAnimator.SetBool("isForward", false);
+                carAnimator.SetBool("isBackward", true);
+                carAnimator.SetBool("isIdle", false);
             }
 
         }

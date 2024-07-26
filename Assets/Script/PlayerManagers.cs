@@ -24,10 +24,10 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer gunSpriteRenderer; // Reference to the SpriteRenderer component
     private int currentWeaponIndex = 0;
     public GameObject armGameObject; // Reference to the arm GameObject
-    
+    public List<GameObject> cars;
     public Sprite armSprite; // Sprite for the arm
 
-    
+
 
     private bool isFiring = false;
     public float fireRate = 0.2f; // Adjust this value to change the fire rate
@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         bodySpriteRenderer = GetComponent<SpriteRenderer>();
         armSpriteRenderer = armGameObject.GetComponent<SpriteRenderer>();
-        
+
         currentHealth = maxHealth;
         UpdateHealthBar();
         UpdateArmAndGunSprites();
@@ -200,7 +200,7 @@ public class PlayerController : MonoBehaviour
             if (!isGunMode)
             {
                 armGameObject.transform.localRotation = Quaternion.identity;
-                
+
                 animator.SetInteger("GunDirection", 0);
 
             }
@@ -214,9 +214,9 @@ public class PlayerController : MonoBehaviour
                 isGunMode = false;
                 animator.SetBool("IsGunMode", false);
                 armGameObject.SetActive(false);
-               
+
                 armGameObject.transform.localRotation = Quaternion.identity;
-                
+
                 animator.SetInteger("GunDirection", 0);
                 foreach (var gun in gunGameObjects)
                 {
@@ -276,7 +276,7 @@ public class PlayerController : MonoBehaviour
             // Change virtual camera targets to the car
             virtualCamera.LookAt = car.transform;
             virtualCamera.Follow = car.transform;
-            
+
         }
     }
 
@@ -506,14 +506,14 @@ public class PlayerController : MonoBehaviour
         if (isGunMode)
         {
             armSpriteRenderer.sprite = armSprite;
-            
+
             armGameObject.SetActive(true);
-            
+
         }
         else
         {
             armGameObject.SetActive(false);
-            
+
         }
     }
 
