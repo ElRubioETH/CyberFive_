@@ -155,9 +155,9 @@ public class ShopManager : MonoBehaviour
                 Transform buttonTransform = shopPanel.transform.Find("ButtonContainer")?.Find(buttonName);
                 if (buttonTransform != null)
                 {
-                    buttonTransform.GetComponent<Button>().interactable = false;
-
+                    buttonTransform.gameObject.SetActive(false);
                 }
+
                 if (weaponIndex >= 0 && weaponIndex < alreadyBoughtPanels.Length && alreadyBoughtPanels[weaponIndex] != null)
                 {
                     alreadyBoughtPanels[weaponIndex].SetActive(true);

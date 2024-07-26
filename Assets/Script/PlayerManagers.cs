@@ -8,6 +8,8 @@ using Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject[] gunGameObjects; // Array to store the gun GameObjects
+    public float[] projectileDamageValues;
     public bool isPlayerInCar = false;
     private bool isTimeStopped = false;
     private bool isTimeStopOnCooldown = false;
@@ -21,10 +23,11 @@ public class PlayerController : MonoBehaviour
     public Slider healthBar;
     private SpriteRenderer gunSpriteRenderer; // Reference to the SpriteRenderer component
     private int currentWeaponIndex = 0;
-
     public GameObject armGameObject; // Reference to the arm GameObject
-    public GameObject gunGameObject; // Reference to the gun GameObject
+    
     public Sprite armSprite; // Sprite for the arm
+
+    
 
     private bool isFiring = false;
     public float fireRate = 0.2f; // Adjust this value to change the fire rate
@@ -32,7 +35,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer bodySpriteRenderer;
     private SpriteRenderer armSpriteRenderer;
-    
+
     private bool isGrounded;
     private bool isAttacking;
     private bool isGunMode;
@@ -51,43 +54,34 @@ public class PlayerController : MonoBehaviour
     public Transform firePoint; // Reference to the point from which the projectile is fired
     public float bulletForce = 20f; // Editable force for the projectile
     public float bulletRadius = 1.5f; // New radius for bullet fire point
-
-    public Sprite[] weaponSprites; // Array to store weapon sprites
-
     public float[] weaponDamageValues; // Array to store damage values for each weapon
     private float currentWeaponDamage; // Variable to store the current weapon's damage
-
-
     public float circleRadius = 1.5f; // Radius of the circle around the player, adjustable
-
     public int gold = 0; // Player's gold
-
-    // Existing variables
     public GameObject inventoryPanel; // Reference to the inventory panel
     public TMP_Text goldText; // Reference to the gold Text element
-
     // Climbing variables
     public Transform climbCheck; // Check if the player is near a climbable object
     public LayerMask climbableLayer; // Layer for climbable objects
     private bool isClimbing = false;
-
     // Shoot effect variables
     public GameObject shootEffectPrefab; // Reference to the shoot effect prefab
     public Transform shootEffectPoint; // Reference to the point where shoot effect will appear
-
     // Time stop audio
     public AudioSource timeStopAudio; // Reference to the audio source for time stop
-    
+
+
+
+
 
     void Start()
     {
-        // Existing code
-        HideAllWeaponButtons(); // Hide all weapon buttons initially
-        ShowWeaponButton(0); // Display only the first weapon button initially
+        HideAllWeaponButtons();
+        ShowWeaponButton(0);
         rb = GetComponent<Rigidbody2D>();
         bodySpriteRenderer = GetComponent<SpriteRenderer>();
         armSpriteRenderer = armGameObject.GetComponent<SpriteRenderer>();
-        gunSpriteRenderer = gunGameObject.GetComponent<SpriteRenderer>();
+        
         currentHealth = maxHealth;
         UpdateHealthBar();
         UpdateArmAndGunSprites();
@@ -100,29 +94,25 @@ public class PlayerController : MonoBehaviour
         if (virtualCamera == null)
         {
             virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
-
-        }
-        if (gunGameObject != null)
-        {
-            gunSpriteRenderer = gunGameObject.GetComponent<SpriteRenderer>();
-            if (gunSpriteRenderer == null)
-            {
-                Debug.LogError("No SpriteRenderer found on gunGameObject!");
-                return;
-            }
-            if (weaponSprites.Length > 0)
-            {
-                // Set initial weapon sprite
-                gunSpriteRenderer.sprite = weaponSprites[currentWeaponIndex];
-                Debug.Log("Initial weapon sprite set to: " + weaponSprites[currentWeaponIndex].name);
-            }
-        }
-        else
-        {
-            Debug.LogError("gunGameObject is not assigned!");
         }
 
+        // Initialize guns
+        for (int i = 0; i < gunGameObjects.Length; i++)
+        {
+            if (i == currentWeaponIndex)
+            {
+                gunGameObjects[i].SetActive(true);
+            }
+            else
+            {
+                gunGameObjects[i].SetActive(false);
+            }
+        }
     }
+
+
+
+
 
     void Update()
 
@@ -140,7 +130,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         float moveInput = 0;
-        
+
 
         if (Input.GetKey(KeyCode.A))
         {
@@ -210,7 +200,7 @@ public class PlayerController : MonoBehaviour
             if (!isGunMode)
             {
                 armGameObject.transform.localRotation = Quaternion.identity;
-                gunGameObject.transform.localRotation = Quaternion.identity;
+                
                 animator.SetInteger("GunDirection", 0);
 
             }
@@ -224,11 +214,16 @@ public class PlayerController : MonoBehaviour
                 isGunMode = false;
                 animator.SetBool("IsGunMode", false);
                 armGameObject.SetActive(false);
-                gunGameObject.SetActive(false);
+               
                 armGameObject.transform.localRotation = Quaternion.identity;
-                gunGameObject.transform.localRotation = Quaternion.identity;
+                
                 animator.SetInteger("GunDirection", 0);
+                foreach (var gun in gunGameObjects)
+                {
+                    gun.SetActive(false);
+                }
             }
+
         }
 
         if (isGunMode)
@@ -281,6 +276,7 @@ public class PlayerController : MonoBehaviour
             // Change virtual camera targets to the car
             virtualCamera.LookAt = car.transform;
             virtualCamera.Follow = car.transform;
+            
         }
     }
 
@@ -314,7 +310,7 @@ public class PlayerController : MonoBehaviour
             {
                 timeStopAudio.Play(); // Play time stop audio
             }
-            
+
         }
         else
         {
@@ -482,7 +478,7 @@ public class PlayerController : MonoBehaviour
 
             if (projectileController != null)
             {
-                projectileController.SetDamage(currentWeaponDamage);
+                projectileController.SetDamage(projectileDamageValues[currentWeaponIndex]);
             }
 
             Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
@@ -510,39 +506,55 @@ public class PlayerController : MonoBehaviour
         if (isGunMode)
         {
             armSpriteRenderer.sprite = armSprite;
-            gunSpriteRenderer.sprite = weaponSprites[currentWeaponIndex]; // Use the current weapon sprite
+            
             armGameObject.SetActive(true);
-            gunGameObject.SetActive(true);
+            
         }
         else
         {
             armGameObject.SetActive(false);
-            gunGameObject.SetActive(false);
+            
         }
     }
 
+
+
     public void ChangeWeapon(int weaponIndex)
     {
-        if (weaponIndex >= 0 && weaponIndex < weaponSprites.Length)
+        if (weaponIndex >= 0 && weaponIndex < gunGameObjects.Length)
         {
-            currentWeaponIndex = weaponIndex; // Update the current weapon index
-            gunSpriteRenderer.sprite = weaponSprites[weaponIndex];
-            currentWeaponDamage = weaponDamageValues[weaponIndex]; // Update the current weapon's damage
-            animator.SetInteger("WeaponIndex", weaponIndex);
-            Debug.Log($"Weapon changed to: {weaponIndex}");
+            // Deactivate current gun
+            if (gunGameObjects[currentWeaponIndex] != null)
+            {
+                gunGameObjects[currentWeaponIndex].SetActive(false);
+            }
+
+            // Update the current weapon index
             currentWeaponIndex = weaponIndex;
-            gunSpriteRenderer.sprite = weaponSprites[currentWeaponIndex];
+
+            // Activate new gun
+            if (gunGameObjects[currentWeaponIndex] != null)
+            {
+                gunGameObjects[currentWeaponIndex].SetActive(true);
+                Debug.Log($"Weapon changed to index: {weaponIndex}, Gun GameObject: {gunGameObjects[weaponIndex].name}");
+            }
+            else
+            {
+                Debug.LogError($"Gun GameObject at index {weaponIndex} is null.");
+            }
 
             // Equip the weapon
             isGunMode = true;
             animator.SetBool("IsGunMode", isGunMode);
-            UpdateArmAndGunSprites();
         }
         else
         {
             Debug.LogError($"Weapon index {weaponIndex} is out of bounds.");
         }
     }
+
+
+
 
     public void BuyWeapon(int weaponIndex, int weaponCost)
     {
@@ -557,7 +569,6 @@ public class PlayerController : MonoBehaviour
             Debug.Log($"Gold after deduction: {gold}");
 
             // Update the gold text to reflect the new amount
-
             Debug.Log("Gold text updated.");
 
             // Change the weapon to the selected one
@@ -568,6 +579,12 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Not enough gold to buy this weapon.");
         }
     }
+
+    public void OnWeaponButtonClicked(int weaponIndex)
+    {
+        ChangeWeapon(weaponIndex);
+    }
+
     private IEnumerator LogGoldAmount()
     {
         while (true)
@@ -596,25 +613,32 @@ public class PlayerController : MonoBehaviour
 
         bodySpriteRenderer.flipX = isFlipped;
 
-        // Flip the arm and gun along the Y-axis if the cursor is to the left
+        // Flip the arm along the Y-axis if the cursor is to the left
         armSpriteRenderer.flipY = isFlipped;
-        gunSpriteRenderer.flipY = isFlipped;
 
-        // Calculate the position of the arm and gun along the circle's radius
+        // Calculate the position of the arm along the circle's radius
         Vector2 circlePosition = direction.normalized * circleRadius;
 
         if (isFlipped)
         {
-            // If flipped, move the arm and gun to the opposite side of the circle
+            // If flipped, move the arm to the opposite side of the circle
             circlePosition = new Vector2(-circlePosition.x, circlePosition.y);
         }
 
         armGameObject.transform.localPosition = circlePosition;
-        gunGameObject.transform.localPosition = circlePosition; // Ensure gun follows the arm
 
-        // Adjust arm and gun rotation based on the angle
-        armGameObject.transform.localRotation = Quaternion.Euler(0, 0, angle);
-        gunGameObject.transform.localRotation = Quaternion.Euler(0, 0, angle); // Ensure gun rotates with the arm
+        // Ensure the gun follows the arm
+        foreach (var gun in gunGameObjects)
+        {
+            if (gun.activeSelf)
+            {
+                SpriteRenderer gunSpriteRenderer = gun.GetComponent<SpriteRenderer>();
+                gunSpriteRenderer.flipY = isFlipped;
+                gun.transform.localPosition = circlePosition;
+                gun.transform.localRotation = Quaternion.Euler(0, 0, angle);
+
+            }
+        }
 
         // Adjust fire point and shoot effect point based on the bullet radius
         float distance = Mathf.Min(direction.magnitude, bulletRadius);
@@ -625,10 +649,12 @@ public class PlayerController : MonoBehaviour
         // Adjust the rotation of the fire point and shoot effect point
         firePoint.rotation = Quaternion.Euler(0, 0, angle);
         shootEffectPoint.rotation = Quaternion.Euler(0, 0, angle);
+        armGameObject.transform.localRotation = Quaternion.Euler(0, 0, angle);
 
         // Flip the shoot effect point based on isFlipped
         shootEffectPoint.localScale = new Vector3(isFlipped ? -1 : 1, 1, 1);
     }
+
 
 
     public void AddGold(int amount)
@@ -680,6 +706,7 @@ public class PlayerController : MonoBehaviour
             buttonTransform.gameObject.SetActive(true);
         }
     }
+
 
 
     private IEnumerator TimeStopCooldown()

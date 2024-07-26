@@ -2,10 +2,9 @@ using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
 {
-    public float speed = 20f; // Speed of the projectile
     private float damage;
+    public float speed = 20f;
     private Rigidbody2D rb;
-
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -18,22 +17,21 @@ public class ProjectileController : MonoBehaviour
         // Set the projectile's velocity
         rb.velocity = transform.right * speed; // Assuming projectile is fired along its right direction
     }
-
-    public void SetDamage(float damageValue)
+    public void SetDamage(float damage)
     {
-        damage = damageValue;
+        this.damage = damage;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Enemy"))
         {
-            Enemy enemy = other.GetComponent<Enemy>();
+            EnemyController enemy = other.GetComponent<EnemyController>();
             if (enemy != null)
             {
                 enemy.TakeDamage(damage);
             }
-            Destroy(gameObject); // Destroy the projectile on collision
+            Destroy(gameObject); // Destroy the projectile after hitting an enemy
         }
     }
 }
