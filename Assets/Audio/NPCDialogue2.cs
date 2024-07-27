@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-public class NPCDialogue : MonoBehaviour
+public class NPCDialogue2 : MonoBehaviour
 {
     public GameObject talkButton; // Reference to the "Press F to talk" UI button
     public GameObject dialogueBox; // Reference to the dialogue box UI panel
@@ -11,9 +11,11 @@ public class NPCDialogue : MonoBehaviour
     private bool isTalking = false;
     private int dialogueIndex = 0;
     private string[] dialogueLines = {
-        "Hello there!",
-        "tôi cần sự giúp đỡ của bạn",
-        "tạm biệt"
+        "Dậy Đi Samurai",
+        "Chúng Ta Có Một Thành Phố Để Đốt",
+        "Hãy Dùng Chiếc Xe Mà Tôi Đã Chuẩn Bị Cho Cậu",
+        "Đi Đến Điểm Hẹn Của Chúng Ta",
+        "Nào Đi Thôi!"
     };
 
     void Start()
