@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Spider : MonoBehaviour
+public class Heli : MonoBehaviour
 {
     public float moveSpeed = 2f;
     public float startPointX = -5f;
@@ -14,9 +14,6 @@ public class Spider : MonoBehaviour
     public Slider healthBar;
     private Animator animator;
     private Vector3 originalScale;
-    private bool isAttacking = false;
-    public int attackDamage = 20;
-    private float attackDelay = 1f; // Delay before the player takes damage
     public int goldReward = 100;
     private bool isDead = false;
     private bool isFlipped = false;
@@ -31,16 +28,14 @@ public class Spider : MonoBehaviour
 
     void Update()
     {
-        if (!isAttacking && !isDead)
-        {
+        
+        
             Move();
-        }
+        
     }
 
     void Move()
     {
-        if (isDead) return; // Prevent movement if dead
-
         if (movingRight)
         {
             transform.position = new Vector2(transform.position.x + moveSpeed * Time.deltaTime, transform.position.y);
@@ -66,8 +61,6 @@ public class Spider : MonoBehaviour
 
     void FlipSprite()
     {
-        if (isDead) return; // Prevent flipping if dead
-
         // Flip the scale instead of the sprite renderer flipX
         Vector3 newScale = originalScale;
         newScale.x *= -1;
@@ -78,31 +71,31 @@ public class Spider : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (isDead) return;
         currentHealth -= damage;
         // Update the health bar gradually
         healthBar.value = currentHealth / maxHealth;
-        animator.SetTrigger("TakeDamage");
+
         if (currentHealth <= 0)
         {
             Die();
         }
     }
 
-    
+
 
     void Die()
     {
-
-        if(isDead) return;
+        if (isDead) return;
         isDead = true;
         StopAllCoroutines();
         PlayerController playerController = FindObjectOfType<PlayerController>();
-        animator.SetTrigger("Dead");
         if (playerController != null)
         {
             playerController.AddGold(goldReward);
         }
+
+        // Play Dead animation and destroy the game object after 2 seconds
+        animator.SetTrigger("Dead");
         Destroy(gameObject, 5f);
         Collider2D[] colliders = GetComponents<Collider2D>(); // Added this block
         foreach (Collider2D collider in colliders) // Added this block
@@ -116,29 +109,5 @@ public class Spider : MonoBehaviour
         {
             rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY; // Added this block
         }
-        animator.ResetTrigger("Walk");
-        animator.ResetTrigger("Attack");
-        animator.ResetTrigger("TakeDamage");
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            isAttacking = true;
-            animator.SetTrigger("Attack");
-            StartCoroutine(DealDamageWithDelay(other.gameObject));
-        }
-    }
-
-    IEnumerator DealDamageWithDelay(GameObject player)
-    {
-        yield return new WaitForSeconds(attackDelay);
-        PlayerController playerController = player.GetComponent<PlayerController>();
-        if (playerController != null)
-        {
-            playerController.TakeDamage(attackDamage);
-        }
-        isAttacking = false;
     }
 }

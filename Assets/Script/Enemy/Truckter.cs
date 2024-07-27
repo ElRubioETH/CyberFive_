@@ -17,7 +17,6 @@ public class Truckter : MonoBehaviour
     private bool isAttacking = false;
     public int attackDamage = 20;
     public int goldReward = 100;
-    public float healthBarUpdateSpeed = 1f; // Speed at which the health bar updates
     public GameObject projectilePrefab;
     public Transform firePoint;
     public float projectileSpeed = 5f;
@@ -44,6 +43,8 @@ public class Truckter : MonoBehaviour
 
     void Move()
     {
+        if (isDead) return; // Prevent movement if dead
+
         if (movingRight)
         {
             transform.position = new Vector2(transform.position.x + moveSpeed * Time.deltaTime, transform.position.y);
@@ -69,6 +70,8 @@ public class Truckter : MonoBehaviour
 
     void FlipSprite()
     {
+        if (isDead) return; // Prevent flipping if dead
+
         // Flip the scale instead of the sprite renderer flipX
         Vector3 newScale = originalScale;
         newScale.x *= -1;
@@ -79,29 +82,21 @@ public class Truckter : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (isDead) return; // Prevent taking damage if dead
+
         currentHealth -= damage;
-        // Update the health bar gradually
-        StartCoroutine(UpdateHealthBarCoroutine(currentHealth / maxHealth));
-        
+        // Update the health bar immediately
+        healthBar.value = currentHealth / maxHealth;
+
+        if (!isDead)
+        {
+            animator.SetTrigger("TakeDamage");
+        }
+
         if (currentHealth <= 0)
         {
             Die();
         }
-    }
-
-    IEnumerator UpdateHealthBarCoroutine(float targetValue)
-    {
-        float startValue = healthBar.value;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < healthBarUpdateSpeed)
-        {
-            healthBar.value = Mathf.Lerp(startValue, targetValue, elapsedTime / healthBarUpdateSpeed);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        healthBar.value = targetValue; // Ensure it ends exactly at the target value
     }
 
     void Die()
@@ -115,8 +110,31 @@ public class Truckter : MonoBehaviour
             playerController.AddGold(goldReward);
         }
 
-        
+        // Play death animation
         animator.SetTrigger("Dead");
+
+        // Stop all other animations
+        animator.ResetTrigger("Walk");
+        animator.ResetTrigger("Idle");
+        animator.ResetTrigger("Attack1");
+        animator.ResetTrigger("Attack2");
+        animator.ResetTrigger("Attack3");
+        animator.ResetTrigger("TakeDamage");
+
+        // Turn off all colliders
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        foreach (Collider2D collider in colliders)
+        {
+            collider.enabled = false;
+        }
+
+        // Freeze X and Y position
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+        }
+
         Destroy(gameObject, 5f);
     }
 
@@ -180,6 +198,8 @@ public class Truckter : MonoBehaviour
 
     void ShootProjectile(Vector3 targetPosition)
     {
+        if (isDead) return; // Prevent shooting if dead
+
         Vector2 direction = (targetPosition - firePoint.position).normalized;
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();

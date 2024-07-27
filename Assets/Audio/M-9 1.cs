@@ -1,18 +1,28 @@
 ﻿using TMPro;
 using UnityEngine;
 
-public class NPCDialogue1 : MonoBehaviour
+public class M9 : MonoBehaviour
 {
     public GameObject talkButton; // Reference to the "Press F to talk" UI button
     public GameObject dialogueBox; // Reference to the dialogue box UI panel
     public TMP_Text dialogueText; // Reference to the TMP_Text component inside the dialogue box
+    public string npcName = "Default NPC"; // Enter the NPC name in the inspector or set it manually
 
     private bool isPlayerNear = false;
     private bool isTalking = false;
     private int dialogueIndex = 0;
-    private string[] dialogueLines = {
-        "Chào Mừng Đến Với Thế Kỷ 25",
 
+    // Use "P" for player and "N" for NPC to identify the speaker
+    private string[] dialogueLines = {
+        "P: Đặc vụ M-9, tôi nghe nói anh có thông tin về lũ buôn bán chíp cấm?",
+        "N: Có thể. Nhưng thông tin ở đây không rẻ. Nếu cậu không có tiền, thì ít nhất cũng phải có chút kỹ năng.",
+        "P: Hãy cho tôi biết điều anh muốn.",
+        "N: Tốt. Nghe này, có một nhóm gọi là Bóng Ma Xanh. Chúng vừa nhận được lô hàng chíp mới từ biên giới phía Bắc. Tôi cần cậu xâm nhập vào căn cứ của chúng và lấy cho tôi một cái chíp mẫu.",
+        "P: Chuyện này sẽ khó khăn đấy. Chúng có vũ khí và an ninh mạnh mẽ.",
+        "N: Không ai nói đây là công việc dễ dàng. Nhưng nếu cậu làm được, tôi sẽ cung cấp cho cậu mọi thông tin về hoạt động buôn bán của chúng. Và có thể, một phần thưởng thêm.",
+        "P: Được thôi",
+        "N: Tốt. Đây là địa chỉ của chúng. Hãy cẩn thận, chúng không ngại giết người để bảo vệ tài sản của mình.",
+        "N: chúc may mắn, kẻ săn mồi. Thành phố này không có chỗ cho kẻ yếu đuối."
     };
 
     void Start()
@@ -52,7 +62,20 @@ public class NPCDialogue1 : MonoBehaviour
     {
         if (dialogueIndex < dialogueLines.Length)
         {
-            dialogueText.text = dialogueLines[dialogueIndex]; // Update the dialogue text
+            string dialogueLine = dialogueLines[dialogueIndex];
+            string speaker = dialogueLine.Substring(0, 1);
+            string dialogue = dialogueLine.Substring(2);
+
+            if (speaker == "P")
+            {
+                string playerName = PlayerPrefs.GetString("PlayerName", "Player");
+                dialogueText.text = $"\"{playerName}\": {dialogue}";
+            }
+            else if (speaker == "N")
+            {
+                dialogueText.text = $"\"{npcName}\": {dialogue}";
+            }
+
             dialogueIndex++;
         }
         else

@@ -26,7 +26,7 @@ public class ProjectileController : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            EnemyController enemy = other.GetComponent<EnemyController>();
+            Spider enemy = other.GetComponent<Spider>();
             if (enemy != null)
             {
                 enemy.TakeDamage(damage);

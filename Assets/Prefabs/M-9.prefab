@@ -189,10 +189,10 @@ GameObject:
   - component: {fileID: 4463168045965398412}
   - component: {fileID: 5330092408545910315}
   - component: {fileID: 644136432970655247}
-  - component: {fileID: 4701753307491710578}
   - component: {fileID: 7566365688784357552}
+  - component: {fileID: 979776637208609772}
   m_Layer: 0
-  m_Name: NPC
+  m_Name: M-9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -207,7 +207,7 @@ Transform:
   m_GameObject: {fileID: 3413960120033026531}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 120.63794, y: 62.375977, z: 0}
+  m_LocalPosition: {x: 174.864, y: 62.376, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -288,21 +288,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4701753307491710578
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3413960120033026531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38d8a295f374091488c6568ccf68040b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  talkButton: {fileID: 5128838602039575094}
-  dialogueBox: {fileID: 3220212570412450128}
-  dialogueText: {fileID: 3476083850063186855}
 --- !u!61 &7566365688784357552
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -348,6 +333,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.72}
   m_EdgeRadius: 0
+--- !u!114 &979776637208609772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3413960120033026531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38d8a295f374091488c6568ccf68040b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  talkButton: {fileID: 5128838602039575094}
+  dialogueBox: {fileID: 3220212570412450128}
+  dialogueText: {fileID: 3476083850063186855}
+  npcName: "\u0110\u1EB7c V\u1EE5 M-9"
 --- !u!1 &5128838602039575094
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,7 +652,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: What Do you Mean ????
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -715,6 +716,6 @@ MonoBehaviour:
   m_margin: {x: -427.16278, y: -62.818085, z: -904.6423, w: -129.55814}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}

@@ -17,7 +17,7 @@ public class Dog : MonoBehaviour
     private bool isAttacking = false;
     public int attackDamage = 20;
     public int goldReward = 100;
-    public float healthBarUpdateSpeed = 1f; // Speed at which the health bar updates
+     
     public GameObject projectilePrefab;
     public Transform firePoint;
     public float projectileSpeed = 5f;
@@ -81,7 +81,7 @@ public class Dog : MonoBehaviour
     {
         currentHealth -= damage;
         // Update the health bar gradually
-        StartCoroutine(UpdateHealthBarCoroutine(currentHealth / maxHealth));
+        healthBar.value = currentHealth / maxHealth;
 
         if (currentHealth <= 0)
         {
@@ -89,20 +89,7 @@ public class Dog : MonoBehaviour
         }
     }
 
-    IEnumerator UpdateHealthBarCoroutine(float targetValue)
-    {
-        float startValue = healthBar.value;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < healthBarUpdateSpeed)
-        {
-            healthBar.value = Mathf.Lerp(startValue, targetValue, elapsedTime / healthBarUpdateSpeed);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        healthBar.value = targetValue; // Ensure it ends exactly at the target value
-    }
+    
 
     void Die()
     {
@@ -117,7 +104,19 @@ public class Dog : MonoBehaviour
 
         // Play Dead animation and destroy the game object after 2 seconds
         animator.SetTrigger("Dead");
-        Destroy(gameObject, 2f);
+        Destroy(gameObject, 5f);
+        Collider2D[] colliders = GetComponents<Collider2D>(); // Added this block
+        foreach (Collider2D collider in colliders) // Added this block
+        {
+            collider.enabled = false; // Added this block
+        }
+
+        // Freeze X and Y position
+        Rigidbody2D rb = GetComponent<Rigidbody2D>(); // Added this block
+        if (rb != null) // Added this block
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY; // Added this block
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)

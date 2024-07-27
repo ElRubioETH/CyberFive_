@@ -6,16 +6,16 @@ public class NPCDialogue2 : MonoBehaviour
     public GameObject talkButton; // Reference to the "Press F to talk" UI button
     public GameObject dialogueBox; // Reference to the dialogue box UI panel
     public TMP_Text dialogueText; // Reference to the TMP_Text component inside the dialogue box
+    public TMP_Text speakerNameText; // Reference to the TMP_Text component for speaker name
 
     private bool isPlayerNear = false;
     private bool isTalking = false;
     private int dialogueIndex = 0;
     private string[] dialogueLines = {
-        "Dậy Đi Samurai",
-        "Chúng Ta Có Một Thành Phố Để Đốt",
-        "Hãy Dùng Chiếc Xe Mà Tôi Đã Chuẩn Bị Cho Cậu",
-        "Đi Đến Điểm Hẹn Của Chúng Ta",
-        "Nào Đi Thôi!"
+        "P: Đây là chíp mẫu. Giờ thì anh phải giữ lời hứa.",
+        "N: Thế mới gọi là công việc chứ. Đưa nó đây và nghe này, thằng nhóc, tôi không thích lòng vòng.",
+        "Player Name: What can I do here?",
+        "NPC Name: You can explore and interact with various characters."
     };
 
     void Start()
@@ -55,7 +55,13 @@ public class NPCDialogue2 : MonoBehaviour
     {
         if (dialogueIndex < dialogueLines.Length)
         {
-            dialogueText.text = dialogueLines[dialogueIndex]; // Update the dialogue text
+            string currentLine = dialogueLines[dialogueIndex];
+            string[] parts = currentLine.Split(new string[] { ": " }, System.StringSplitOptions.None);
+            if (parts.Length == 2)
+            {
+                speakerNameText.text = parts[0]; // Update the speaker name
+                dialogueText.text = parts[1]; // Update the dialogue text
+            }
             dialogueIndex++;
         }
         else
@@ -67,6 +73,7 @@ public class NPCDialogue2 : MonoBehaviour
     void EndDialogue()
     {
         isTalking = false;
+        speakerNameText.text = ""; // Clear the speaker name text
         dialogueText.text = ""; // Clear the dialogue text
         dialogueBox.SetActive(false); // Hide the dialogue box
     }

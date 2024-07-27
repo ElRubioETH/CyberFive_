@@ -17,11 +17,12 @@ public class MainMenuController : MonoBehaviour
     public Button exitButton;
     public AudioMixer audioMixer; // Reference to the Audio Mixer
     public TMP_Text volumePercentageText; // Reference to TMP text for volume percentage
+    public EnterPlayerNamePanel enterPlayerNamePanel; // Reference to the EnterPlayerNamePanel script
 
     void Start()
     {
         // Set up button listeners
-        playButton.onClick.AddListener(PlayGame);
+        playButton.onClick.AddListener(OpenEnterNamePanel);
         settingsButton.onClick.AddListener(OpenSettings);
         returnButton.onClick.AddListener(ReturnToMainMenu);
         exitButton.onClick.AddListener(ExitGame);
@@ -44,9 +45,10 @@ public class MainMenuController : MonoBehaviour
         UpdateVolumePercentageText(volumeSlider.value);
     }
 
-    void PlayGame()
+    void OpenEnterNamePanel()
     {
-        SceneManager.LoadScene(1);
+        mainMenuPanel.SetActive(false);
+        enterPlayerNamePanel.ShowPanel();
     }
 
     void OpenSettings()
