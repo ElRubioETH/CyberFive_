@@ -43,6 +43,16 @@ public class ProjectileController : MonoBehaviour
             Destroy(gameObject);
 
         }
+        if (other.CompareTag("Enemy"))
+        {
+            Truckter enemy = other.GetComponent<Truckter>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
+            Destroy(gameObject);
+
+        }
     }
 
 }
