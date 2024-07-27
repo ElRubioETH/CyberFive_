@@ -33,5 +33,16 @@ public class ProjectileController : MonoBehaviour
             }
             Destroy(gameObject); // Destroy the projectile after hitting an enemy
         }
+        if (other.CompareTag("Enemy"))
+        {
+            Dog enemy = other.GetComponent<Dog>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
+            Destroy(gameObject);
+
+        }
     }
+
 }

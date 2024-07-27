@@ -44,7 +44,6 @@ public class PlayerController : MonoBehaviour
     private bool isDoubleJumping; // Flag to track double jump state
     private int maxHealth = 100;
     private int currentHealth;
-    private bool isTakeDamage;
     public List<GameObject> ignoreTimeStopObjects;
     public GameObject car; // Reference to the car GameObject
     private CarController carController; // Reference to the CarController script
@@ -445,11 +444,12 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-
+        animator.SetTrigger("TakeDamage");
         UpdateHealthBar();
         if (currentHealth <= 0)
         {
             Die();
+
         }
 
     }
@@ -720,7 +720,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             currentHealth -= 20;
-            animator.SetBool("TakeDamage", isTakeDamage);
+            animator.SetTrigger("TakeDamage");
             if (currentHealth <= 0)
             {
                 currentHealth = 0;
