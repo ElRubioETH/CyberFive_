@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -10,17 +12,21 @@ public class GameManager : MonoBehaviour
     public GameObject shopPanel; // Reference to the shop panel
     public Slider volumeSlider;
     public GameObject player; // Reference to the player GameObject
-
+    public TMP_Text volumePercentageText;
     private PlayerController playerController;
     private bool isMenuOpen = false;
     private bool isInventoryOpen = false;
     //private bool isShopOpen = false;
-
+    public AudioMixer audioMixer;
     void Start()
     {
         playerController = player.GetComponent<PlayerController>();
-            
 
+        volumeSlider.onValueChanged.AddListener(ChangeVolume);
+        float currentVolume;
+        audioMixer.GetFloat("MasterVolume", out currentVolume);
+        volumeSlider.value = Mathf.Pow(10, currentVolume / 20);
+        UpdateVolumePercentageText(volumeSlider.value);
 
         if (menuPanel != null)
         {
@@ -98,6 +104,25 @@ public class GameManager : MonoBehaviour
         {
             ToggleInventory();
         }
+    }
+    void ChangeVolume(float volume)
+    {
+        // Prevent the volume from being set to 0 to avoid logarithm issues
+        float minVolume = 0.0001f; // Smallest volume to use when slider is at 0
+        float clampedVolume = Mathf.Clamp(volume, minVolume, 1f);
+
+        // Convert linear value to dB
+        float dB = Mathf.Log10(clampedVolume) * 20;
+
+        audioMixer.SetFloat("MasterVolume", dB);
+
+        // Update volume percentage text
+        UpdateVolumePercentageText(volume);
+    }
+    void UpdateVolumePercentageText(float volume)
+    {
+        int volumePercentage = Mathf.RoundToInt(volume * 100);
+        volumePercentageText.text = $"{volumePercentage}%";
     }
     private void AssignButtonActions()
     {

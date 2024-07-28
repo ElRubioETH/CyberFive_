@@ -40,7 +40,7 @@ public class EnterPlayerNamePanel : MonoBehaviour
             PlayerPrefs.SetString("PlayerName", playerName);
 
             // Load the next scene or perform any action you need
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene("FireCity");
         }
     }
 
