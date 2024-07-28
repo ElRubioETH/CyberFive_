@@ -13,9 +13,13 @@ public class CarController : MonoBehaviour
     private PlayerController playerController;
     public GameObject player;
     public GameObject[] gunGameObjects;
+  
+ 
+    public AudioSource sceneAudioSource;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+  
 
     }
 
@@ -29,8 +33,10 @@ public class CarController : MonoBehaviour
 
     public void EnterCar()
     {
+
         isPlayerInCar = true;
         carAudioSource.Play();
+        sceneAudioSource.Pause();
 
         playerController = player.GetComponent<PlayerController>();
         foreach (var gun in gunGameObjects)
@@ -45,6 +51,7 @@ public class CarController : MonoBehaviour
         isPlayerInCar = false;
         playerTransform.position = transform.position; // Align player with car position
         carAudioSource.Stop();
+        sceneAudioSource.UnPause();
     }
 
     void HandleCarMovement()

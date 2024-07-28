@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     private bool isInventoryOpen = false;
     //private bool isShopOpen = false;
     public AudioMixer audioMixer;
+    public AudioSource sceneAudioSource;
     void Start()
     {
         playerController = player.GetComponent<PlayerController>();
