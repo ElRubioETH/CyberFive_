@@ -372,10 +372,10 @@ GameObject:
   - component: {fileID: 4517588781667263124}
   - component: {fileID: 4553155915703449625}
   - component: {fileID: 3594447076724968376}
-  - component: {fileID: 5464048793536799294}
   - component: {fileID: 3440363034800111223}
   - component: {fileID: 2413985704649117033}
   - component: {fileID: 4134594535115575311}
+  - component: {fileID: 3148466487327827795}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -392,8 +392,8 @@ Transform:
   m_GameObject: {fileID: 4954908392988740617}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 121.995, y: 62.594, z: 0}
-  m_LocalScale: {x: 0.2972, y: 0.3243, z: 1}
+  m_LocalPosition: {x: 172.25, y: 62.6, z: 0}
+  m_LocalScale: {x: -0.2972, y: 0.3243, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8262561496799272981}
@@ -503,51 +503,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &5464048793536799294
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4954908392988740617}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.17565179, y: -1.1482508}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.27, y: 1.61}
-    newSize: {x: 4.27, y: 1.61}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 3.7587357, y: 0.008703709}
-  m_EdgeRadius: 0
 --- !u!114 &3440363034800111223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -566,6 +521,18 @@ MonoBehaviour:
   flyDownSpeed: 3
   carAnimator: {fileID: 4553155915703449625}
   carAudioSource: {fileID: 4134594535115575311}
+  player: {fileID: 0}
+  gunGameObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!61 &2413985704649117033
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -622,10 +589,10 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 6029840112906327927, guid: 8d50cfb815e4dfb409f04b1dde961eb1, type: 2}
   m_audioClip: {fileID: 8300000, guid: 4eb94cfcf3bdaab4a9e8ef83a3a3d83e, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -707,6 +674,49 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!68 &3148466487327827795
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4954908392988740617}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -1.6287179, y: -1.0964874}
+  - {x: -1.6051584, y: -1.1086444}
+  - {x: 1.3922801, y: -1.1133144}
+  - {x: 1.5250075, y: -1.0506004}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
 --- !u!1 &6420172210124050786
 GameObject:
   m_ObjectHideFlags: 0

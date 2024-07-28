@@ -1,101 +1,144 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Enemy : MonoBehaviour
+public class Spider : MonoBehaviour
 {
-    public int health = 100;
-    public int maxHealth = 100; // Maximum health for the slider
-    public int goldReward = 100; // Gold given when the enemy dies
-    public Slider healthBar; // Reference to the health bar slider
-    public Slider delayedHealthBar; // Reference to the delayed health bar slider
-    public float healthBarUpdateDuration = 1.5f; // Duration for the health bar to update
+    public float moveSpeed = 2f;
+    public float startPointX = -5f;
+    public float endPointX = 5f;
+    private bool movingRight = true;
+    public float maxHealth = 100f;
+    private float currentHealth;
+    public Slider healthBar;
+    private Animator animator;
+    private Vector3 originalScale;
+    private bool isAttacking = false;
+    public int attackDamage = 20;
+    private float attackDelay = 1f; // Delay before the player takes damage
+    public int goldReward = 100;
+    private bool isDead = false;
+    private bool isFlipped = false;
 
-    private float lastDamageTime; // Time when the last damage was taken
-    private bool isUpdatingDelayedHealthBar = false; // Flag to check if the delayed health bar coroutine is running
-
-    private void Start()
+    void Start()
     {
-        // Initialize the health bar sliders
-        if (healthBar != null)
-        {
-            healthBar.maxValue = maxHealth;
-            healthBar.value = health;
-        }
+        currentHealth = maxHealth;
+        healthBar.value = 1f; // Set initial health bar to full
+        animator = GetComponent<Animator>();
+        originalScale = transform.localScale;
+    }
 
-        if (delayedHealthBar != null)
+    void Update()
+    {
+        if (!isAttacking && !isDead)
         {
-            delayedHealthBar.maxValue = maxHealth;
-            delayedHealthBar.value = health;
+            Move();
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    void Move()
     {
-        if (other.CompareTag("Player"))
+        if (isDead) return; // Prevent movement if dead
+
+        if (movingRight)
         {
-            PlayerController playerController = other.GetComponent<PlayerController>();
-            if (playerController != null)
+            transform.position = new Vector2(transform.position.x + moveSpeed * Time.deltaTime, transform.position.y);
+            if (transform.position.x >= endPointX)
             {
-                playerController.TakeDamage(20); // Change this to 20 for -20 health
+                movingRight = false;
+                FlipSprite();
             }
         }
+        else
+        {
+            transform.position = new Vector2(transform.position.x - moveSpeed * Time.deltaTime, transform.position.y);
+            if (transform.position.x <= startPointX)
+            {
+                movingRight = true;
+                FlipSprite();
+            }
+        }
+
+        // Play walk animation
+        animator.SetTrigger("Walk");
     }
 
+    void FlipSprite()
+    {
+        if (isDead) return; // Prevent flipping if dead
+
+        // Flip the scale instead of the sprite renderer flipX
+        Vector3 newScale = originalScale;
+        newScale.x *= -1;
+        transform.localScale = newScale;
+        originalScale = newScale; // Update originalScale to the new flipped scale
+        isFlipped = !isFlipped; // Update the flip status
+    }
 
     public void TakeDamage(float damage)
     {
-        health -= (int)damage;
-        lastDamageTime = Time.time;
-        if (healthBar != null)
-        {
-            StartCoroutine(UpdateHealthBar(healthBar, healthBar.value, health, healthBarUpdateDuration));
-        }
-        if (!isUpdatingDelayedHealthBar && delayedHealthBar != null)
-        {
-            StartCoroutine(UpdateDelayedHealthBar());
-        }
-        if (health <= 0)
+        if (isDead) return;
+        currentHealth -= damage;
+        // Update the health bar gradually
+        healthBar.value = currentHealth / maxHealth;
+        animator.SetTrigger("TakeDamage");
+        if (currentHealth <= 0)
         {
             Die();
         }
     }
 
-    private IEnumerator UpdateHealthBar(Slider slider, float startValue, float endValue, float duration)
-    {
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            slider.value = Mathf.Lerp(startValue, endValue, elapsed / duration);
-            yield return null;
-        }
-        slider.value = endValue;
-    }
-
-    private IEnumerator UpdateDelayedHealthBar()
-    {
-        isUpdatingDelayedHealthBar = true;
-        while (Time.time - lastDamageTime < 1.0f)
-        {
-            yield return null;
-        }
-
-        if (delayedHealthBar != null)
-        {
-            StartCoroutine(UpdateHealthBar(delayedHealthBar, delayedHealthBar.value, health, healthBarUpdateDuration));
-        }
-
-        isUpdatingDelayedHealthBar = false;
-    }
+    
 
     void Die()
     {
+
+        if(isDead) return;
+        isDead = true;
+        StopAllCoroutines();
         PlayerController playerController = FindObjectOfType<PlayerController>();
+        animator.SetTrigger("Dead");
         if (playerController != null)
         {
             playerController.AddGold(goldReward);
         }
-        Destroy(gameObject);
+        Destroy(gameObject, 5f);
+        Collider2D[] colliders = GetComponents<Collider2D>(); // Added this block
+        foreach (Collider2D collider in colliders) // Added this block
+        {
+            collider.enabled = false; // Added this block
+        }
+
+        // Freeze X and Y position
+        Rigidbody2D rb = GetComponent<Rigidbody2D>(); // Added this block
+        if (rb != null) // Added this block
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY; // Added this block
+        }
+        animator.ResetTrigger("Walk");
+        animator.ResetTrigger("Attack");
+        animator.ResetTrigger("TakeDamage");
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isAttacking = true;
+            animator.SetTrigger("Attack");
+            StartCoroutine(DealDamageWithDelay(other.gameObject));
+        }
+    }
+
+    IEnumerator DealDamageWithDelay(GameObject player)
+    {
+        yield return new WaitForSeconds(attackDelay);
+        PlayerController playerController = player.GetComponent<PlayerController>();
+        if (playerController != null)
+        {
+            playerController.TakeDamage(attackDamage);
+        }
+        isAttacking = false;
     }
 }

@@ -10,11 +10,13 @@ public class CarController : MonoBehaviour
     private Rigidbody2D rb;
     private bool isPlayerNearCar = false;
     public AudioSource carAudioSource;
-
-
+    private PlayerController playerController;
+    public GameObject player;
+    public GameObject[] gunGameObjects;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
     }
 
     void Update()
@@ -29,6 +31,13 @@ public class CarController : MonoBehaviour
     {
         isPlayerInCar = true;
         carAudioSource.Play();
+
+        playerController = player.GetComponent<PlayerController>();
+        foreach (var gun in gunGameObjects)
+        {
+            gun.SetActive(false);
+        }
+
     }
 
     public void ExitCar(Transform playerTransform)

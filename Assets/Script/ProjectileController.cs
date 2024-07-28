@@ -53,6 +53,16 @@ public class ProjectileController : MonoBehaviour
             Destroy(gameObject);
 
         }
+        if (other.CompareTag("Enemy"))
+        {
+            Heli enemy = other.GetComponent<Heli>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
+            Destroy(gameObject);
+
+        }
     }
 
 }
