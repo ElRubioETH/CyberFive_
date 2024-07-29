@@ -512,10 +512,10 @@ VideoPlayer:
   m_TargetAudioSources:
   - {fileID: 0}
   m_DirectAudioVolumes:
-  - 1
-  m_Url: 
+  - 0
+  m_Url: https://www.youtube.com/watch?v=hWTvOa3vifU&list=RDhWTvOa3vifU&start_radio=1
   m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
+  m_DirectAudioMutes: 01
   m_ControlledAudioTrackCount: 1
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
@@ -535,6 +535,8 @@ GameObject:
   - component: {fileID: 259645523}
   - component: {fileID: 259645522}
   - component: {fileID: 259645521}
+  - component: {fileID: 259645524}
+  - component: {fileID: 259645525}
   m_Layer: 5
   m_Name: Setting
   m_TagString: Untagged
@@ -643,6 +645,39 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 259645519}
   m_CullTransparentMesh: 1
+--- !u!95 &259645524
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259645519}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bb0edf794ae3e624e8b2e1790992eb68, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &259645525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259645519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e04ff0ac81d05743b14478bd167d24e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &310803280
 GameObject:
   m_ObjectHideFlags: 0
@@ -1033,6 +1068,8 @@ GameObject:
   - component: {fileID: 688717487}
   - component: {fileID: 688717486}
   - component: {fileID: 688717485}
+  - component: {fileID: 688717488}
+  - component: {fileID: 688717489}
   m_Layer: 5
   m_Name: Exit
   m_TagString: Untagged
@@ -1141,6 +1178,39 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 688717483}
   m_CullTransparentMesh: 1
+--- !u!95 &688717488
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688717483}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bb0edf794ae3e624e8b2e1790992eb68, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &688717489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688717483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e04ff0ac81d05743b14478bd167d24e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &750380050
 GameObject:
   m_ObjectHideFlags: 0
@@ -2184,6 +2254,8 @@ GameObject:
   - component: {fileID: 1431470862}
   - component: {fileID: 1431470861}
   - component: {fileID: 1431470860}
+  - component: {fileID: 1431470863}
+  - component: {fileID: 1431470864}
   m_Layer: 5
   m_Name: Play
   m_TagString: Untagged
@@ -2292,6 +2364,39 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1431470858}
   m_CullTransparentMesh: 1
+--- !u!95 &1431470863
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431470858}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bb0edf794ae3e624e8b2e1790992eb68, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1431470864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431470858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e04ff0ac81d05743b14478bd167d24e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1485500861
 GameObject:
   m_ObjectHideFlags: 0
@@ -2906,9 +3011,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: 8d50cfb815e4dfb409f04b1dde961eb1, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 335befd355a68214581ad48f373e4592, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 405a61858f1d99546bd4ed9baee6390e, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.254
   m_Pitch: 1
   Loop: 1
   Mute: 0

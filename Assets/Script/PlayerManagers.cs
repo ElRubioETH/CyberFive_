@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
+using JetBrains.Annotations;
+using Unity.VisualScripting;
 
 
 public class PlayerController : MonoBehaviour
@@ -32,9 +34,11 @@ public class PlayerController : MonoBehaviour
     private bool isFiring = false;
     public float fireRate = 0.2f; // Adjust this value to change the fire rate
 
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private SpriteRenderer bodySpriteRenderer;
     private SpriteRenderer armSpriteRenderer;
+  
+    public float ValueX { get; set; }
 
     private bool isGrounded;
     private bool isAttacking;
@@ -71,10 +75,21 @@ public class PlayerController : MonoBehaviour
 
 
 
+    public void EnableControls()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        rb.velocity = Vector2.one;
+    }
+    public void DisableControls()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        rb.velocity = Vector2.zero;
+    }
 
 
     void Start()
     {
+        
         HideAllWeaponButtons();
         ShowWeaponButton(0);
         rb = GetComponent<Rigidbody2D>();
@@ -108,10 +123,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-
-
-
 
     void Update()
 
@@ -180,7 +191,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-
+        
 
 
 
@@ -248,6 +259,9 @@ public class PlayerController : MonoBehaviour
             ToggleTimeStop();
         }
     }
+
+    
+
 
     void ToggleCar()
     {
