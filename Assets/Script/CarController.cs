@@ -52,6 +52,8 @@ public class CarController : MonoBehaviour
         playerTransform.position = transform.position; // Align player with car position
         carAudioSource.Stop();
         sceneAudioSource.UnPause();
+        playerController = player.GetComponent<PlayerController>();
+       
     }
 
     void HandleCarMovement()
