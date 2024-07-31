@@ -63,6 +63,26 @@ public class ProjectileController : MonoBehaviour
             Destroy(gameObject);
 
         }
+        if (other.CompareTag("Enemy"))
+        {
+            FireflyKiller enemy = other.GetComponent<FireflyKiller>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
+            Destroy(gameObject);
+
+        }
+        if (other.CompareTag("Enemy"))
+        {
+            BlueHead enemy = other.GetComponent<BlueHead>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
+            Destroy(gameObject);
+
+        }
     }
 
 }

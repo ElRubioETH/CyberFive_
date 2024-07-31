@@ -35,7 +35,7 @@ public class ShopManager : MonoBehaviour
 
         if (shopPanel != null)
         {
-            GameObject buttonContainer = shopPanel.transform.Find("ButtonContainer")?.gameObject;
+            buttonContainer = shopPanel.transform.Find("ButtonContainer")?.gameObject;
             if (buttonContainer != null)
             {
                 for (int i = 0; i < weaponNames.Length; i++)

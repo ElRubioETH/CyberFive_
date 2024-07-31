@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer gunSpriteRenderer; // Reference to the SpriteRenderer component
     private int currentWeaponIndex = 0;
     public GameObject armGameObject; // Reference to the arm GameObject
-    public List<GameObject> cars;
+    
     public Sprite armSprite; // Sprite for the arm
 
 
@@ -49,8 +49,10 @@ public class PlayerController : MonoBehaviour
     private int maxHealth = 100;
     private int currentHealth;
     public List<GameObject> ignoreTimeStopObjects;
-    public GameObject car; // Reference to the car GameObject
-    private CarController carController; // Reference to the CarController script
+    public GameObject car;
+    public GameObject r34;
+    private CarController carController;
+    private R34 r34Controller;
     private Collider2D playerCollider;
     public CinemachineVirtualCamera virtualCamera;
     public GameObject projectilePrefab; // Reference to the projectile prefab
@@ -95,7 +97,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         bodySpriteRenderer = GetComponent<SpriteRenderer>();
         armSpriteRenderer = armGameObject.GetComponent<SpriteRenderer>();
-
+        
+        animator = GetComponent<Animator>();
         currentHealth = maxHealth;
         UpdateHealthBar();
         UpdateArmAndGunSprites();
@@ -104,6 +107,7 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(LogGoldAmount());
         UpdateGoldText();
         carController = car.GetComponent<CarController>();
+        r34Controller = r34.GetComponent<R34>();
         playerCollider = GetComponent<Collider2D>();
         if (virtualCamera == null)
         {
@@ -127,11 +131,17 @@ public class PlayerController : MonoBehaviour
     void Update()
 
     {
+
         carController = car.GetComponent<CarController>();
+        r34Controller = r34.GetComponent<R34>();
 
         if (Input.GetKeyDown(KeyCode.C)) // Key to get in/out of the car
         {
             ToggleCar();
+        }
+        if (Input.GetKeyDown(KeyCode.C)) // Key to get in/out of the car
+        {
+            ToggleCarR34();
         }
 
         if (carController.isPlayerInCar)
@@ -258,9 +268,10 @@ public class PlayerController : MonoBehaviour
         {
             ToggleTimeStop();
         }
+        
     }
 
-    
+
 
 
     void ToggleCar()
@@ -292,7 +303,35 @@ public class PlayerController : MonoBehaviour
 
         }
     }
+    void ToggleCarR34()
+    {
+        if (r34Controller.isPlayerInCar)
+        {
+            // Player gets out of the car
+            r34Controller.ExitCar(transform);
+            r34Controller.DetachPlayer(transform); // Detach player from the car
+            animator.SetBool("BikerInCar", false);
+            Physics2D.IgnoreCollision(r34.GetComponent<Collider2D>(), playerCollider, false); // Re-enable collision
 
+            // Change virtual camera targets back to the player
+            virtualCamera.LookAt = transform;
+            virtualCamera.Follow = transform;
+        }
+        else if (r34Controller.IsPlayerNearCar())
+        {
+            // Player gets in the car
+            transform.position = r34.transform.position; // Align player with car position
+            r34Controller.EnterCar();
+            r34Controller.AttachPlayer(transform); // Attach player to the car
+            animator.SetBool("BikerInCar", true);
+            Physics2D.IgnoreCollision(car.GetComponent<Collider2D>(), playerCollider, true); // Ignore collision
+
+            // Change virtual camera targets to the car
+            virtualCamera.LookAt = r34.transform;
+            virtualCamera.Follow = r34.transform;
+
+        }
+    }
 
 
 
@@ -478,9 +517,36 @@ public class PlayerController : MonoBehaviour
 
     public void Die()
     {
+        isDefaultMode = !isDefaultMode;
+        animator.SetBool("IsDefaultMode", isDefaultMode);
+        if (isDefaultMode)
+        {
+            isGunMode = false;
+            animator.SetBool("IsGunMode", false);
+            armGameObject.SetActive(false);
+
+            armGameObject.transform.localRotation = Quaternion.identity;
+
+            animator.SetInteger("GunDirection", 0);
+            foreach (var gun in gunGameObjects)
+            {
+                gun.SetActive(false);
+            }
+        }
         animator.SetTrigger("Die");
         rb.velocity = Vector2.zero; // Stop player movement
         this.enabled = false; // Disable the script
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        foreach (Collider2D collider in colliders) // Added this block
+        {
+            collider.enabled = false; // Added this block
+        }
+        
+        if (rb != null) // Added this block
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY; // Added this block
+        }
+        
     }
 
     void Shoot()
