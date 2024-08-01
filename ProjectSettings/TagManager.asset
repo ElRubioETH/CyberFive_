@@ -8,6 +8,8 @@ TagManager:
   - money
   - cyborg
   - enemies
+  - trapelec
+  - climb
   layers:
   - Default
   - TransparentFX

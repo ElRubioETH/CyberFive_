@@ -98,5 +98,10 @@ public class Player : MonoBehaviour
             health -= 20;
             hp.value = health;
         }
+        if (other.gameObject.CompareTag("trapelec"))
+        {
+            health -= 5;
+            hp.value = health;
+        }
     }
 }
