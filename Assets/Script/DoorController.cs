@@ -26,7 +26,10 @@ public class DoorController2D : MonoBehaviour
             doorAnimator.SetBool("isOpen", false);
             doorAnimator.SetBool("isIdle", false);
             // Wait for the close animation to finish before setting idle animation
-            StartCoroutine(WaitForCloseAnimation());
+            if (gameObject.activeInHierarchy)
+            {
+                StartCoroutine(WaitForCloseAnimation());
+            }
         }
     }
 
