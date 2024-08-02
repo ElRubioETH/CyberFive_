@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float jumping = 10f;
     [SerializeField] private float movespeed = 5f;
     [SerializeField] private float runspeed = 10f;
+    [SerializeField] private float push = 5f;
     [SerializeField] private TextMeshProUGUI textmoney;
     [SerializeField] private TextMeshProUGUI missionmoney;
     [SerializeField] private Slider hp;
@@ -95,7 +96,7 @@ public class Player : MonoBehaviour
         }
         if (other.gameObject.CompareTag("enemies"))
         {
-            health -= 20;
+            health -= 1;
             hp.value = health;
         }
         if (other.gameObject.CompareTag("trapelec"))

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8927892861503714686}
   - component: {fileID: 826353764606102623}
   - component: {fileID: 3202477070617226328}
+  - component: {fileID: 9026458400024453687}
   m_Layer: 0
   m_Name: Trap_0
   m_TagString: trapelec
@@ -161,7 +162,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6752448935838490849}
-  m_BodyType: 1
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -180,3 +181,17 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &9026458400024453687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6752448935838490849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bd1161305a41334aaf553257524ad55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pushplayer: 100
+  dog: {fileID: 0}

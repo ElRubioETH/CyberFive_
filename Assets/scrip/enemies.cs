@@ -13,10 +13,12 @@ public class enemies : MonoBehaviour
     [SerializeField]
     private float rightBomoving;
     private bool isMovingright=true;
+    Animator animator;
     // Start is called before the first frame update
     void Start()
     {
-
+        hp.value = enemies_hp;
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -40,5 +42,17 @@ public class enemies : MonoBehaviour
             currentScale.x *= -1;
         }       
         transform.localScale = currentScale;
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            enemies_hp -= 20;
+            hp.value = enemies_hp;
+            if (enemies_hp == 0)
+            {
+                Destroy(gameObject);
+            }
+        }        
     }
 }
