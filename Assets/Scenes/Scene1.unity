@@ -47343,7 +47343,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 1
+  orthographic size: 1.52
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -47368,7 +47368,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -7.589415e-19, y: 0.0000000037252907, z: 2.8272779e-27, w: 1}
-  m_LocalPosition: {x: 117.75, y: 64.85, z: -10}
+  m_LocalPosition: {x: 117.75, y: 65.85, z: -10}
   m_LocalScale: {x: 0.83, y: 0.83, z: 0.83}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -48106,10 +48106,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 0, z: -10}
-  m_XDamping: 0
-  m_YDamping: 0
-  m_ZDamping: 0
+  m_FollowOffset: {x: 0, y: 1, z: -10}
+  m_XDamping: 1
+  m_YDamping: 1
+  m_ZDamping: 1
   m_AngularDampingMode: 0
   m_PitchDamping: 0
   m_YawDamping: 0
@@ -48400,7 +48400,7 @@ MonoBehaviour:
   m_Follow: {fileID: 860260270}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 1
+    OrthographicSize: 1.52
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -48411,7 +48411,7 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
   m_Transitions:
     m_BlendHint: 0
-    m_InheritPosition: 1
+    m_InheritPosition: 0
     m_OnCameraLive:
       m_PersistentCalls:
         m_Calls:
