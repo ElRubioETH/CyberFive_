@@ -799,8 +799,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            currentHealth -= 20;
-            animator.SetTrigger("TakeDamage");
+            
             if (currentHealth <= 0)
             {
                 currentHealth = 0;
