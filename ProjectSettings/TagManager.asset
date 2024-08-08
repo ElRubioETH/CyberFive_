@@ -10,6 +10,7 @@ TagManager:
   - enemies
   - trapelec
   - climb
+  - miss1
   layers:
   - Default
   - TransparentFX
