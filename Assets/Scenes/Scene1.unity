@@ -49367,6 +49367,7 @@ GameObject:
   - component: {fileID: 1327677111}
   - component: {fileID: 1327677116}
   - component: {fileID: 1327677117}
+  - component: {fileID: 1327677118}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -49563,6 +49564,19 @@ MonoBehaviour:
   health: 500
   deathEffect: {fileID: 0}
   isInvulnerable: 0
+--- !u!114 &1327677118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327677109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f185e949021ec1744b45f6488b677184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorToTurnTo: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1359495238 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5228842580533600903, guid: 61f05ad01024f1d4b94b1e2eff73c1b6, type: 3}
