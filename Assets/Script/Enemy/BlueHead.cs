@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class BlueHead : MonoBehaviour
 {
+    
+    public Transform firepoint;
     public float maxHealth = 100f;
     private float currentHealth;
     public Slider healthBar;
@@ -56,7 +58,7 @@ public class BlueHead : MonoBehaviour
 
     void ShootProjectile()
     {
-        if (projectilePrefab == null) return;
+        if (projectilePrefab == null || firepoint == null) return;
 
         GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
         Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
@@ -104,11 +106,30 @@ public class BlueHead : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !isAttacking && !isDead)
         {
             isAttacking = true;
             animator.SetTrigger("Attack");
             StartCoroutine(DealDamageWithDelay());
+            StartCoroutine(RepeatedAttack());
+        }
+    }
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isAttacking = false;
+            StopCoroutine(RepeatedAttack());
+        }
+    }
+    IEnumerator RepeatedAttack()
+    {
+        while (isAttacking)
+        {
+            animator.SetTrigger("Attack");
+            yield return new WaitForSeconds(0.3f); // Adjust the delay for animation timing
+            CreateHitbox();
+            yield return new WaitForSeconds(2f - 0.3f); // 2 seconds delay between each attack minus animation time
         }
     }
 
@@ -132,4 +153,6 @@ public class BlueHead : MonoBehaviour
         }
         Destroy(hitbox, hitboxDuration); // Destroy hitbox after duration
     }
+
+
 }
