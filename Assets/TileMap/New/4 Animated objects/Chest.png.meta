@@ -3,11 +3,7 @@ guid: aa04ad9ec8acd0c4984df9e252499ec1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-<<<<<<< HEAD
   serializedVersion: 13
-=======
-  serializedVersion: 12
->>>>>>> VanGiang
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -47,11 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-<<<<<<< HEAD
   spriteMode: 2
-=======
-  spriteMode: 1
->>>>>>> VanGiang
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -114,7 +106,6 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-<<<<<<< HEAD
   - serializedVersion: 3
     buildTarget: WebGL
     maxTextureSize: 2048
@@ -215,11 +206,6 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-=======
-  spriteSheet:
-    serializedVersion: 2
-    sprites: []
->>>>>>> VanGiang
     outline: []
     physicsShape: []
     bones: []
@@ -230,15 +216,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-<<<<<<< HEAD
     nameFileIdTable:
       Chest_0: -1561373527
       Chest_1: 781875136
       Chest_2: -1994975973
       Chest_3: -1238293440
-=======
-    nameFileIdTable: {}
->>>>>>> VanGiang
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

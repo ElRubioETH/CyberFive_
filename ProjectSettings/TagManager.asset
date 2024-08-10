@@ -4,20 +4,19 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - trapele
-  - ene_att
-  - enemy
-  - trapelec
+  - Enemy
+  - Projectile
+  - Platform
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Neon
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Platform
+  - Neon
+  - Ladder
   - 
   - 
   - 
@@ -45,24 +44,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: backgr
-    uniqueID: 3082877829
-    locked: 0
-  - name: decor
-    uniqueID: 2307130529
-    locked: 0
-  - name: nen
-    uniqueID: 3902170731
-    locked: 0
-  - name: choleoduoc
-    uniqueID: 3376552313
-    locked: 0
-  - name: thang
-    uniqueID: 778015319
-    locked: 0
-  - name: player
-    uniqueID: 1103484577
-    locked: 0
-  - name: trap
-    uniqueID: 2185183953
+  - name: UI
+    uniqueID: 2966296077
     locked: 0
