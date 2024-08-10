@@ -36,6 +36,10 @@ public class Spider : MonoBehaviour
         {
             Move();
         }
+        if (currentHealth == 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void Move()
@@ -131,6 +135,8 @@ public class Spider : MonoBehaviour
             animator.SetTrigger("Attack");
             StartCoroutine(DealDamageWithDelay(other.gameObject));
             att.SetActive(true);
+            currentHealth -= 20;
+            healthBar.value = currentHealth;
         }
     }
 
@@ -144,4 +150,5 @@ public class Spider : MonoBehaviour
         }
         isAttacking = false;
     }
+
 }
