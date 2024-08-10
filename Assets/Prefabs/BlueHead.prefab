@@ -585,6 +585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e8e8b1362fdc13498137b5966da20f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firepoint: {fileID: 0}
   maxHealth: 1000
   healthBar: {fileID: 436481289677336640}
   attackDamage: 20
@@ -751,3 +752,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
+  explosionEffect: {fileID: 0}
