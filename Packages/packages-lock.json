@@ -52,11 +52,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.cinemachine": {
-<<<<<<< HEAD
       "version": "2.10.1",
-=======
-      "version": "2.9.7",
->>>>>>> parent of 805e4e3 (hehe)
       "depth": 0,
       "source": "registry",
       "dependencies": {
