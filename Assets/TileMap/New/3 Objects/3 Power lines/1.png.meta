@@ -3,7 +3,11 @@ guid: e0996dbd53038c24bbcb4d0b2c77582d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
+<<<<<<< HEAD
   serializedVersion: 13
+=======
+  serializedVersion: 12
+>>>>>>> VanGiang
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -106,6 +110,7 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+<<<<<<< HEAD
   - serializedVersion: 3
     buildTarget: WebGL
     maxTextureSize: 2048
@@ -119,6 +124,8 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+=======
+>>>>>>> VanGiang
   spriteSheet:
     serializedVersion: 2
     sprites: []

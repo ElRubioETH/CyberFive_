@@ -105,7 +105,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.cinemachine": {
+<<<<<<< HEAD
       "version": "2.10.1",
+=======
+      "version": "2.10.0",
+>>>>>>> VanGiang
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -153,7 +157,11 @@
       }
     },
     "com.unity.ide.rider": {
+<<<<<<< HEAD
       "version": "3.0.31",
+=======
+      "version": "3.0.28",
+>>>>>>> VanGiang
       "depth": 0,
       "source": "registry",
       "dependencies": {
