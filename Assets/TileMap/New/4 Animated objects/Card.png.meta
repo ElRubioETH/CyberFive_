@@ -3,7 +3,11 @@ guid: 77e4c4c1f02d7254db920f6802ee39e6
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
+<<<<<<< HEAD
   serializedVersion: 13
+=======
+  serializedVersion: 12
+>>>>>>> VanGiang
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -43,7 +47,11 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
+<<<<<<< HEAD
   spriteMode: 2
+=======
+  spriteMode: 1
+>>>>>>> VanGiang
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -106,6 +114,7 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+<<<<<<< HEAD
   - serializedVersion: 3
     buildTarget: WebGL
     maxTextureSize: 2048
@@ -290,6 +299,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+=======
+  spriteSheet:
+    serializedVersion: 2
+    sprites: []
+>>>>>>> VanGiang
     outline: []
     physicsShape: []
     bones: []
@@ -300,6 +314,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+<<<<<<< HEAD
     nameFileIdTable:
       Card_0: -1436291180
       Card_1: 1383892276
@@ -309,6 +324,9 @@ TextureImporter:
       Card_5: 1722679424
       Card_6: -1479845777
       Card_7: 549658062
+=======
+    nameFileIdTable: {}
+>>>>>>> VanGiang
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

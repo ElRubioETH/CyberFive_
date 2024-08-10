@@ -107,7 +107,11 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
+<<<<<<< HEAD
     buildTarget: WebGL
+=======
+    buildTarget: Android
+>>>>>>> VanGiang
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -137,8 +141,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
+<<<<<<< HEAD
       spriteID: 23ab9a10afbf4994592c9fed6c8750f6
       internalID: 343095463
+=======
+      spriteID: 64929206d1d73e44d8dcdd8b50da5f43
+      internalID: -9659849
+>>>>>>> VanGiang
       vertices: []
       indices: 
       edges: []
@@ -158,8 +167,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
+<<<<<<< HEAD
       spriteID: 6fef26ed296807d4c98f84f702d51d54
       internalID: -1604202560
+=======
+      spriteID: 4303c710894354d4cb71ce1ba75f75f8
+      internalID: 970070922
+>>>>>>> VanGiang
       vertices: []
       indices: 
       edges: []
@@ -179,8 +193,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
+<<<<<<< HEAD
       spriteID: 1150f47b613b8f94f84936d803532857
       internalID: -1188756240
+=======
+      spriteID: 6b1fd03a0249af04f8d4566795e27d42
+      internalID: 1070836652
+>>>>>>> VanGiang
       vertices: []
       indices: 
       edges: []
@@ -200,8 +219,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
+<<<<<<< HEAD
       spriteID: 9f857b01038b24746ab21315721126e3
       internalID: 659350380
+=======
+      spriteID: 85fe9904b320e73469cff89aca9c6432
+      internalID: 513566353
+>>>>>>> VanGiang
       vertices: []
       indices: 
       edges: []
@@ -217,10 +241,17 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+<<<<<<< HEAD
       Trap_0: 343095463
       Trap_1: -1604202560
       Trap_2: -1188756240
       Trap_3: 659350380
+=======
+      Trap_0: -9659849
+      Trap_1: 970070922
+      Trap_2: 1070836652
+      Trap_3: 513566353
+>>>>>>> VanGiang
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
