@@ -1,58 +1,147 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class enemies : MonoBehaviour
+public class Spider : MonoBehaviour
 {
-    [SerializeField] private Slider hp;
-    [SerializeField] private float moveSpeed = 5f;
-    private float enemies_hp = 100f;
-    [SerializeField]
-    private float leftBomoving;
-    [SerializeField]
-    private float rightBomoving;
-    private bool isMovingright=true;
-    Animator animator;
-    // Start is called before the first frame update
+    public float moveSpeed = 2f;
+    public float startPointX = -5f;
+    public float endPointX = 5f;
+    private bool movingRight = true;
+    public float maxHealth = 100f;
+    private float currentHealth;
+    public Slider healthBar;
+    private Animator animator;
+    private Vector3 originalScale;
+    private bool isAttacking = false;
+    public int attackDamage = 20;
+    private float attackDelay = 1f; // Delay before the player takes damage
+    public int goldReward = 100;
+    private bool isDead = false;
+    private bool isFlipped = false;
+    public GameObject att;
+
     void Start()
     {
-        hp.value = enemies_hp;
+        currentHealth = maxHealth;
+        healthBar.value = 100f; // Set initial health bar to full
         animator = GetComponent<Animator>();
+        originalScale = transform.localScale;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        var currentPosition = transform.localPosition;
-  
-        if (currentPosition.x > rightBomoving)
+        if (!isAttacking && !isDead)
         {
-            isMovingright = true;
+            Move();
         }
-        else if (currentPosition.x < leftBomoving)
-        {
-            isMovingright = false;
-        }
-        var direction = isMovingright ? Vector3.left : Vector3.right;
-        transform.Translate(direction * moveSpeed * Time.deltaTime);
-        var currentScale = transform.localScale;
-        if ((isMovingright == true && currentScale.x < 0) || (isMovingright == false && currentScale.x > 0))
-        {
-            currentScale.x *= -1;
-        }       
-        transform.localScale = currentScale;
     }
-    private void OnTriggerEnter2D(Collider2D other)
+
+    void Move()
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (isDead) return; // Prevent movement if dead
+
+        if (movingRight)
         {
-            enemies_hp -= 20;
-            hp.value = enemies_hp;
-            if (enemies_hp == 0)
+            transform.position = new Vector2(transform.position.x + moveSpeed * Time.deltaTime, transform.position.y);
+            if (transform.position.x >= endPointX)
             {
-                Destroy(gameObject);
+                movingRight = false;
+                FlipSprite();
             }
-        }        
+        }
+        else
+        {
+            transform.position = new Vector2(transform.position.x - moveSpeed * Time.deltaTime, transform.position.y);
+            if (transform.position.x <= startPointX)
+            {
+                movingRight = true;
+                FlipSprite();
+            }
+        }
+
+        // Play walk animation
+        animator.SetTrigger("Walk");
+        att.SetActive(false);
+    }
+
+    void FlipSprite()
+    {
+        if (isDead) return; // Prevent flipping if dead
+
+        // Flip the scale instead of the sprite renderer flipX
+        Vector3 newScale = originalScale;
+        newScale.x *= -1;
+        transform.localScale = newScale;
+        originalScale = newScale; // Update originalScale to the new flipped scale
+        isFlipped = !isFlipped; // Update the flip status
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (isDead) return;
+        currentHealth -= damage;
+        // Update the health bar gradually
+        healthBar.value = currentHealth / maxHealth;
+        animator.SetTrigger("TakeDamage");
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+
+
+    void Die()
+    {
+
+        if (isDead) return;
+        isDead = true;
+        StopAllCoroutines();
+        PlayerController playerController = FindObjectOfType<PlayerController>();
+        animator.SetTrigger("Dead");
+        if (playerController != null)
+        {
+            playerController.AddGold(goldReward);
+        }
+        Destroy(gameObject, 5f);
+        Collider2D[] colliders = GetComponents<Collider2D>(); // Added this block
+        foreach (Collider2D collider in colliders) // Added this block
+        {
+            collider.enabled = false; // Added this block
+        }
+
+        // Freeze X and Y position
+        Rigidbody2D rb = GetComponent<Rigidbody2D>(); // Added this block
+        if (rb != null) // Added this block
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY; // Added this block
+        }
+        animator.ResetTrigger("Walk");
+        animator.ResetTrigger("Attack");
+        animator.ResetTrigger("TakeDamage");
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isAttacking = true;
+            animator.SetTrigger("Attack");
+            StartCoroutine(DealDamageWithDelay(other.gameObject));
+            att.SetActive(true);
+        }
+    }
+
+    IEnumerator DealDamageWithDelay(GameObject player)
+    {
+        yield return new WaitForSeconds(attackDelay);
+        PlayerController playerController = player.GetComponent<PlayerController>();
+        if (playerController != null)
+        {
+            playerController.TakeDamage(attackDamage);
+        }
+        isAttacking = false;
     }
 }

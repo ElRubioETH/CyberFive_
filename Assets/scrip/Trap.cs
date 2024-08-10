@@ -9,6 +9,8 @@ public class Trap : MonoBehaviour
     Animator animator;
     [SerializeField]
     private GameObject dog;
+    [SerializeField]
+    private GameObject wall;
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -19,6 +21,7 @@ public class Trap : MonoBehaviour
         if(dog == null)
         {
             animator.SetBool("trap", false);
+            Destroy(wall);
         }
     }
     void OnTriggerEnter2D(Collider2D other)

@@ -24,6 +24,11 @@ public class Player : MonoBehaviour
     private bool IsGrounded;
     private Animator animator;
     private SpriteRenderer sprite;
+    [SerializeField] GameObject enemi;
+    [SerializeField] GameObject wall;
+    private float delay_eneatt = 0.8f;
+    public float trapDamageInterval = 0.5f; // Thời gian giữa các lần trừ máu
+    private float nextTrapDamageTime = 0f; // Thời gian tiếp theo để trừ máu
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -47,6 +52,10 @@ public class Player : MonoBehaviour
         {
             Time.timeScale = 0;
             gameover.SetActive(true);
+        }
+        if (enemi == null)
+        {
+            Destroy(wall);
         }
     }
     void Jump()
@@ -99,10 +108,33 @@ public class Player : MonoBehaviour
             health -= 1;
             hp.value = health;
         }
-        if (other.gameObject.CompareTag("trapelec"))
+        if (other.gameObject.CompareTag("ene_att"))
+        {
+            StartCoroutine(DamageAfterDelayCoroutine());
+        }
+  /*      if (other.gameObject.CompareTag("trapelec") && enemi != null)
         {
             health -= 5;
             hp.value = health;
+        }*/
+    }
+    private IEnumerator DamageAfterDelayCoroutine()
+    {
+        // Chờ 1 giây
+        yield return new WaitForSeconds(delay_eneatt);
+        health -= 5f;
+        hp.value = health;
+    }
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("trapelec") && enemi != null)
+        {
+            if (Time.time >= nextTrapDamageTime)
+            {
+                health -= 5;
+                hp.value = health;
+                nextTrapDamageTime = Time.time + trapDamageInterval;
+            }
         }
     }
 }

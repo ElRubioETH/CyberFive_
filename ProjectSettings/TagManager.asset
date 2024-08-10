@@ -11,6 +11,7 @@ TagManager:
   - trapelec
   - climb
   - miss1
+  - ene_att
   layers:
   - Default
   - TransparentFX
