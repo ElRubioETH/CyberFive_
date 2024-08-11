@@ -83,6 +83,16 @@ public class ProjectileController : MonoBehaviour
             Destroy(gameObject);
 
         }
+        if (other.CompareTag("Boss"))
+        {
+            BossBiker enemy = other.GetComponent<BossBiker>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
+            Destroy(gameObject);
+
+        }
     }
 
 }
