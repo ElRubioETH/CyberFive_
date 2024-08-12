@@ -6384,6 +6384,7 @@ MonoBehaviour:
   shootEffectPrefab: {fileID: 4614579824595606680}
   shootEffectPoint: {fileID: 736484619038577436}
   timeStopAudio: {fileID: 1336725115136721336}
+  gameover: {fileID: 4276273926549862112, guid: 03e71b1825f39c4409dabff542ebcada, type: 3}
 --- !u!50 &5458460139274342058
 Rigidbody2D:
   serializedVersion: 4
