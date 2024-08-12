@@ -2084,7 +2084,7 @@ Transform:
   m_GameObject: {fileID: 2659483616994345665}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 174.231, y: 62.401, z: 0}
+  m_LocalPosition: {x: 103.003, y: 63.205, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -2255,7 +2255,7 @@ MonoBehaviour:
   circleRadius: 0.01
   gold: 0
   inventoryPanel: {fileID: 8197914459595112372}
-  goldText: {fileID: 0}
+  goldText: {fileID: 709073052485833256}
   climbCheck: {fileID: 2101724005270764113}
   climbableLayer:
     serializedVersion: 2
@@ -2263,6 +2263,7 @@ MonoBehaviour:
   shootEffectPrefab: {fileID: 2235570262797307449}
   shootEffectPoint: {fileID: 2519386649381361651}
   timeStopAudio: {fileID: 4964386830586069161}
+  gameover: {fileID: 0}
 --- !u!50 &4470435820599485122
 Rigidbody2D:
   serializedVersion: 4

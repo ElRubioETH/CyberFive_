@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -28,8 +28,6 @@ public class PlayerController : MonoBehaviour
     public GameObject armGameObject; // Reference to the arm GameObject
     
     public Sprite armSprite; // Sprite for the arm
-
-
 
     private bool isFiring = false;
     public float fireRate = 0.2f; // Adjust this value to change the fire rate
@@ -74,6 +72,8 @@ public class PlayerController : MonoBehaviour
     public Transform shootEffectPoint; // Reference to the point where shoot effect will appear
     // Time stop audio
     public AudioSource timeStopAudio; // Reference to the audio source for time stop
+    [SerializeField]
+    private GameObject gameover;
 
 
 
@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        
+      
         HideAllWeaponButtons();
         ShowWeaponButton(0);
         rb = GetComponent<Rigidbody2D>();
@@ -131,7 +131,6 @@ public class PlayerController : MonoBehaviour
     void Update()
 
     {
-
         carController = car.GetComponent<CarController>();
         r34Controller = r34.GetComponent<R34>();
 
@@ -268,6 +267,7 @@ public class PlayerController : MonoBehaviour
         {
             ToggleTimeStop();
         }
+        
         
     }
 
@@ -502,9 +502,18 @@ public class PlayerController : MonoBehaviour
         if (currentHealth <= 0)
         {
             Die();
-
+            StartCoroutine(PauseGame());
         }
 
+    }
+    private IEnumerator PauseGame()
+    {
+        // Đợi 1 giây thực tế (real-time seconds)
+        yield return new WaitForSeconds(0.5f);
+
+        // Tạm dừng trò chơi
+        Time.timeScale = 0;
+        gameover.SetActive(true);
     }
 
     void UpdateHealthBar()
