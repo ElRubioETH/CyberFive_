@@ -6,10 +6,13 @@ using UnityEngine.UI;
 using Cinemachine;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject gameOverPanel;  // The Game Over panel to activate
+    public GameObject sceneChoosePanel;  // The Scene Choose panel to activate
     public GameObject[] gunGameObjects; // Array to store the gun GameObjects
     public float[] projectileDamageValues;
     public bool isPlayerInCar = false;
@@ -91,7 +94,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-      
+        gameOverPanel.SetActive(false);
+        sceneChoosePanel.SetActive(false);
         HideAllWeaponButtons();
         ShowWeaponButton(0);
         rb = GetComponent<Rigidbody2D>();
@@ -526,6 +530,8 @@ public class PlayerController : MonoBehaviour
 
     public void Die()
     {
+        gameOverPanel.SetActive(true);
+        Time.timeScale = 0f;  // Pause the game
         isDefaultMode = !isDefaultMode;
         animator.SetBool("IsDefaultMode", isDefaultMode);
         if (isDefaultMode)
@@ -557,7 +563,47 @@ public class PlayerController : MonoBehaviour
         }
         
     }
+    public void RestartScene()
+    {
+        Time.timeScale = 1f;  // Unpause the game
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 
+    // Button function to go to the main menu
+    public void GoToMainMenu()
+    {
+        Time.timeScale = 1f;  // Unpause the game
+        SceneManager.LoadScene("MainMenu");  // Replace with your Main Menu scene name
+    }
+
+    // Button function to open the Scene Choose panel
+    public void OpenSceneChoosePanel()
+    {
+        
+        sceneChoosePanel.SetActive(true);
+    }
+
+    // Button function to load a specific scene
+    public void LoadScene(string sceneName)
+    {
+        Time.timeScale = 1f;  // Unpause the game
+        SceneManager.LoadScene(sceneName);
+    }
+    public void LoadLv1()
+    {
+        Time.timeScale = 1f;  // Unpause the game
+        SceneManager.LoadScene("lv1");  // Replace with your Main Menu scene name
+    }
+    public void LoadLv2()
+    {
+        Time.timeScale = 1f;  // Unpause the game
+        SceneManager.LoadScene("lv2");  // Replace with your Main Menu scene name
+    }
+    public void LoadLv3()
+    {
+        Time.timeScale = 1f;  // Unpause the game
+        SceneManager.LoadScene("hehe");  // Replace with your Main Menu scene name
+    }
     void Shoot()
     {
         if (firePoint != null && projectilePrefab != null)
