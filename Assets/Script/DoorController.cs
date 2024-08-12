@@ -60,6 +60,6 @@ public class DoorController2D : MonoBehaviour
 
     void LoadScene()
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("lv1");
     }
 }
