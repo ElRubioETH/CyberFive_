@@ -16,6 +16,6 @@ public class FireCityConfirmButton : MonoBehaviour
     // Update is called once per frame
     private void OnConfirmButtonClicked()
     {
-            SceneManager.LoadScene("Scene1");  
+            SceneManager.LoadScene("lv1");  
     }
 }

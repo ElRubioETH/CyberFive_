@@ -12,9 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/FireCity.unity
     guid: 2645e1a862e4c17468bbb1c697d6fae5
   - enabled: 1
-    path: Assets/Scenes/Scene1.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
     path: Assets/Scenes/1ndboss.unity
     guid: 30bfa64fe861d1f4982b98e97dd8685a
   - enabled: 1
@@ -26,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/hehe.unity
     guid: 67658177aa3fc5d4e874836e397a3539
+  - enabled: 1
+    path: Assets/Scenes/lv2.unity
+    guid: 9f7afd9473e68e04189874a504dc41d3
+  - enabled: 1
+    path: Assets/Scenes/lv1.unity
+    guid: 802dd87de39706b4d883d5fbc50bd023
   m_configObjects: {}
