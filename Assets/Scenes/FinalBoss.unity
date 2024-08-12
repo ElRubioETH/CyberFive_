@@ -14234,8 +14234,12 @@ PrefabInstance:
       propertyPath: projectileDamage
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedComponents:
+    - {fileID: 7889014449392646297, guid: 4d103cdc36ce1354f9b04de4b1f5cb5a, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 698547312272734794, guid: 4d103cdc36ce1354f9b04de4b1f5cb5a, type: 3}
+    - {fileID: 497897463263631575, guid: 4d103cdc36ce1354f9b04de4b1f5cb5a, type: 3}
+    - {fileID: 4375203916572189668, guid: 4d103cdc36ce1354f9b04de4b1f5cb5a, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d103cdc36ce1354f9b04de4b1f5cb5a, type: 3}
