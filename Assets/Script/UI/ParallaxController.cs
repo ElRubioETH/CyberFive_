@@ -27,7 +27,6 @@ public class ParallaxControler : MonoBehaviour
         {
             backgrounds[i] = transform.GetChild(i).gameObject;
             mat[i] = backgrounds[i].GetComponent<Renderer>().material;
-
         }
         BackSpeedCalculate(backCount);
     }
@@ -47,11 +46,19 @@ public class ParallaxControler : MonoBehaviour
             backSpeed[i] = 1 - (backgrounds[i].transform.position.z - cam.position.z) / farthestBack;
         }
     }
+
     private void LateUpdate()
     {
         distance = cam.position.x - camStartPos.x;
-        transform.position = new Vector3(cam.position.x, transform.position.y, 0);
 
+        // Fix the Y position of the camera so that it always stays centered vertically
+        Vector3 newCamPos = new Vector3(cam.position.x, camStartPos.y, cam.position.z);
+        cam.position = newCamPos;
+
+        // Update the transform position to follow the camera's X position only
+        transform.position = new Vector3(cam.position.x, camStartPos.y, transform.position.z);
+
+        // Update the parallax effect for each background
         for (int i = 0; i < backgrounds.Length; i++)
         {
             float speed = backSpeed[i] * parallaxSpeed;
@@ -59,4 +66,3 @@ public class ParallaxControler : MonoBehaviour
         }
     }
 }
-
