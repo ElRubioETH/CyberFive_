@@ -65557,6 +65557,66 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a4124f26540554fb5a6b7ebcd1ed17, type: 3}
+<<<<<<< HEAD
+=======
+--- !u!1001 &7324106735096006219
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1427654298787742698, guid: 750d1c3463ac65c438cdfdb55ca48e71, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 123.41696
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427654298787742698, guid: 750d1c3463ac65c438cdfdb55ca48e71, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 62.40414
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427654298787742698, guid: 750d1c3463ac65c438cdfdb55ca48e71, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427654298787742698, guid: 750d1c3463ac65c438cdfdb55ca48e71, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427654298787742698, guid: 750d1c3463ac65c438cdfdb55ca48e71, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427654298787742698, guid: 750d1c3463ac65c438cdfdb55ca48e71, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427654298787742698, guid: 750d1c3463ac65c438cdfdb55ca48e71, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427654298787742698, guid: 750d1c3463ac65c438cdfdb55ca48e71, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427654298787742698, guid: 750d1c3463ac65c438cdfdb55ca48e71, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427654298787742698, guid: 750d1c3463ac65c438cdfdb55ca48e71, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3580098054324247742, guid: 750d1c3463ac65c438cdfdb55ca48e71, type: 3}
+      propertyPath: m_Name
+      value: BackGround
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 750d1c3463ac65c438cdfdb55ca48e71, type: 3}
+>>>>>>> parent of 28e8eba (Merge branch 'main' of https://github.com/ElRubioETH/CyberFive_)
 --- !u!1 &7344870187003284061 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5025302000826985736, guid: 58356307e316bc047b2dd1ff11fdef17, type: 3}

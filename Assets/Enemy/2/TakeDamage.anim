@@ -21,9 +21,15 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
+<<<<<<< HEAD
       value: {fileID: -914638771, guid: b3ffe2a5bea242d47afcfab783829b24, type: 3}
     - time: 0.06666667
       value: {fileID: -1990915191, guid: b3ffe2a5bea242d47afcfab783829b24, type: 3}
+=======
+      value: {fileID: -1990915191, guid: b3ffe2a5bea242d47afcfab783829b24, type: 3}
+    - time: 0.083333336
+      value: {fileID: -914638771, guid: b3ffe2a5bea242d47afcfab783829b24, type: 3}
+>>>>>>> parent of 28e8eba (Merge branch 'main' of https://github.com/ElRubioETH/CyberFive_)
     attribute: m_Sprite
     path: 
     classID: 212
@@ -46,14 +52,23 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
+<<<<<<< HEAD
     - {fileID: -914638771, guid: b3ffe2a5bea242d47afcfab783829b24, type: 3}
     - {fileID: -1990915191, guid: b3ffe2a5bea242d47afcfab783829b24, type: 3}
+=======
+    - {fileID: -1990915191, guid: b3ffe2a5bea242d47afcfab783829b24, type: 3}
+    - {fileID: -914638771, guid: b3ffe2a5bea242d47afcfab783829b24, type: 3}
+>>>>>>> parent of 28e8eba (Merge branch 'main' of https://github.com/ElRubioETH/CyberFive_)
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
+<<<<<<< HEAD
     m_StopTime: 0.083333336
+=======
+    m_StopTime: 0.1
+>>>>>>> parent of 28e8eba (Merge branch 'main' of https://github.com/ElRubioETH/CyberFive_)
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
