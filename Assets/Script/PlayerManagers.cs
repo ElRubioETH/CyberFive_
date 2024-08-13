@@ -77,6 +77,7 @@ public class PlayerController : MonoBehaviour
     public AudioSource timeStopAudio; // Reference to the audio source for time stop
     [SerializeField]
     private GameObject gameover;
+    private float healthplayer=4;
 
 
 
@@ -138,6 +139,11 @@ public class PlayerController : MonoBehaviour
         carController = car.GetComponent<CarController>();
         r34Controller = r34.GetComponent<R34>();
 
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            healthplayer--;
+            Heal();
+        }
         if (Input.GetKeyDown(KeyCode.C)) // Key to get in/out of the car
         {
             ToggleCar();
@@ -869,6 +875,13 @@ public class PlayerController : MonoBehaviour
         }
 
     }
-
+    public void Heal()
+    {
+        if (healthplayer > 0)
+        {
+            currentHealth = maxHealth;
+            UpdateHealthBar();
+        }
+    }
 
 }

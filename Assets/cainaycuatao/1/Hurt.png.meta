@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a0060bf2fabfd5b42b33d9750b80681a
+guid: 67a2c15bb05d9d346a8a8ab8ab202bf3
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Fountain_0
+      name: Hurt_0
       rect:
         serializedVersion: 2
-        x: 4
+        x: 3
         y: 0
-        width: 64
-        height: 69
+        width: 23
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -111,20 +111,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c2e6ba00cc52470478f08e15e51bcb9b
-      internalID: 1857901205
+      spriteID: e88402507cccf1942a9091e49d9393c0
+      internalID: -1420751414
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fountain_1
+      name: Hurt_1
       rect:
         serializedVersion: 2
-        x: 76
+        x: 49
         y: 0
-        width: 64
-        height: 69
+        width: 24
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -132,50 +132,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f568bf909b9bd0149ad36b921e4979bb
-      internalID: -1826073682
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fountain_2
-      rect:
-        serializedVersion: 2
-        x: 148
-        y: 0
-        width: 64
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f9ae0e92d540e064286f9b0f1085f0c4
-      internalID: -1736070299
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fountain_3
-      rect:
-        serializedVersion: 2
-        x: 220
-        y: 0
-        width: 64
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 50a1136738d72234fb5c2e76521cfdf0
-      internalID: 1033246468
+      spriteID: 34323567bc22cc6499c3a745df982abe
+      internalID: -747036132
       vertices: []
       indices: 
       edges: []
@@ -191,10 +149,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Fountain_0: 1857901205
-      Fountain_1: -1826073682
-      Fountain_2: -1736070299
-      Fountain_3: 1033246468
+      Hurt_0: -1420751414
+      Hurt_1: -747036132
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
