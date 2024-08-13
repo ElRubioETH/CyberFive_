@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 3201702526068718039}
   - component: {fileID: 6747980484187710462}
   - component: {fileID: 2786103153821383245}
-  - component: {fileID: 7451401902941140109}
+  - component: {fileID: 3525713143582142849}
   m_Layer: 0
   m_Name: Spider
   m_TagString: Enemy
@@ -106,7 +106,7 @@ Transform:
   m_GameObject: {fileID: 2346487855603151725}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 136.63, y: 62.39, z: 0}
+  m_LocalPosition: {x: 138.914, y: 62.395, z: 0}
   m_LocalScale: {x: 0.75609386, y: 0.57183516, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -153,9 +153,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 30
+  m_SortingOrder: 50
   m_Sprite: {fileID: 1538122469, guid: 29c8977f46216c94a9328d77622fb0f6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.3882353}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -303,7 +303,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.17016691, y: 0.49401277}
   m_EdgeRadius: 0
---- !u!114 &7451401902941140109
+--- !u!114 &3525713143582142849
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -312,16 +312,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2346487855603151725}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 050fd7840c05d7f44bab14220ae78ef1, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b5ab236d6128e844b2929aaf391c3f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 1
-  startPointX: 132.63
-  endPointX: 136.63
-  maxHealth: 200
+  startPointX: 136.72
+  endPointX: 138.914
+  maxHealth: 138.686
   healthBar: {fileID: 1431590128283080975}
   attackDamage: 20
-  goldReward: 100
+  goldReward: 400
 --- !u!1 &3221760512040181770
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,7 +507,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!114 &6034663400775014233
 MonoBehaviour:
