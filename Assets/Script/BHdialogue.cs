@@ -15,15 +15,14 @@ public class BHdialogue : MonoBehaviour
 
     // Use "P" for player and "N" for NPC to identify the speaker
     private string[] dialogueLines = {
-        "P: Đặc vụ M-9, tôi nghe nói anh có thông tin về lũ buôn bán chíp cấm?",
-        "N: Có thể. Nhưng thông tin ở đây không rẻ. Nếu cậu không có tiền, thì ít nhất cũng phải có chút kỹ năng.",
-        "P: Hãy cho tôi biết điều anh muốn.",
-        "N: Tốt. Nghe này, có một nhóm gọi là Bóng Ma Xanh. Chúng vừa nhận được lô hàng chíp mới từ biên giới phía Bắc. Tôi cần cậu xâm nhập vào căn cứ của chúng và lấy cho tôi một cái chíp mẫu.",
-        "P: Chuyện này sẽ khó khăn đấy. Chúng có vũ khí và an ninh mạnh mẽ.",
-        "N: Không ai nói đây là công việc dễ dàng. Nhưng nếu cậu làm được, tôi sẽ cung cấp cho cậu mọi thông tin về hoạt động buôn bán của chúng. Và có thể, một phần thưởng thêm.",
-        "P: Được thôi",
-        "N: Tốt. Đây là địa chỉ của chúng. Hãy cẩn thận, chúng không ngại giết người để bảo vệ tài sản của mình.",
-        "N: chúc may mắn, kẻ săn mồi. Thành phố này không có chỗ cho kẻ yếu đuối."
+        "P: Mày nghĩ cái cơ thể to lớn đó sẽ cứu được mày sao? Trong thế giới này, sức mạnh không nằm ở cơ bắp mà ở những gì mày biết.",
+        "N: Tao không cần thông minh để đè bẹp mày. Chỉ cần một cú đấm là mày đã nằm xuống rồi.",
+        "P: Mày có thể nghiền nát tao, nhưng đừng quên, tao là người duy nhất có thể đưa mày đến nơi mày muốn.",
+        "N: Mày nghĩ mình là ai mà dám đứng trước mặt tao như thế này? Mày chỉ là một hạt cát trong sa mạc mà thôi.",
+        "P: Thế giới này không dành cho kẻ yếu đuối, nhưng cũng không dành cho những thằng to xác mà không có não đâu.",
+        "N: Mày có thể đánh bại tao, nhưng mày không thể chạy trốn khỏi chính mình. Những bóng tối mày tạo ra cuối cùng sẽ nuốt chửng mày",
+        "P: Công nghệ của mày có thể nhanh, nhưng tao thì vẫn còn nhanh hơn thế.",
+        "N: Mày có thể chạy, nhưng mày không thể trốn mãi được. Tao sẽ tìm ra mày, và khi đó sẽ không có nơi nào để mày ẩn náu."
     };
 
     void Start()
